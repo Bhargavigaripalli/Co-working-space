@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 100" width="320" height="100" fill="none">
+  <defs>
+    <!-- Cyan / Teal Gradient -->
+    <linearGradient id="stacklyCyanGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#22d3ee" />
+      <stop offset="50%" stop-color="#06b6d4" />
+      <stop offset="100%" stop-color="#0891b2" />
+    </linearGradient>
+    
+    <!-- Deep Navy / Royal Indigo Gradient -->
+    <linearGradient id="stacklyNavyGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#3b82f6" />
+      <stop offset="50%" stop-color="#1e3a8a" />
+      <stop offset="100%" stop-color="#0f172a" />
+    </linearGradient>
+
+    <!-- Glow Filter -->
+    <filter id="stacklyGlow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="0" stdDeviation="4" flood-color="#06b6d4" flood-opacity="0.4" />
+    </filter>
+  </defs>
+
+  <!-- Emblem Icon (Left: x=15 to 85, y=10 to 90) -->
+  <g transform="translate(14, 10)">
+    <!-- Upper Loop (Navy / Indigo) -->
+    <path d="M42 6 C52 6, 62 13, 62 25 C62 38, 48 45, 34 50 C26 53, 16 57, 16 68 C16 76, 22 81, 31 81 C36 81, 41 79, 45 76 L48 83 C43 87, 36 90, 29 90 C15 90, 6 80, 6 66 C6 50, 22 43, 36 38 C46 34, 52 29, 52 22 C52 16, 47 13, 40 13 C33 13, 26 16, 21 21 L16 14 C23 8, 32 6, 42 6 Z" fill="url(#stacklyNavyGrad)" />
+    
+    <!-- Lower Loop & Swoosh (Vibrant Cyan / Teal) -->
+    <path d="M48 30 C58 35, 68 44, 68 58 C68 76, 52 88, 34 88 C25 88, 17 85, 11 80 L16 72 C21 76, 27 79, 34 79 C46 79, 57 70, 57 58 C57 48, 50 42, 42 37 Z" fill="url(#stacklyCyanGrad)" filter="url(#stacklyGlow)" />
+
+    <!-- Center Accent Energy Particle / Spark -->
+    <circle cx="38" cy="46" r="3.5" fill="#38bdf8" />
+  </g>
+
+  <!-- Wordmark: STACKLY (x=95 to 305, vertically centered at y=58) -->
+  <g fill="#ffffff" font-family="'Poppins', 'Inter', -apple-system, sans-serif" font-weight="800" font-size="34" letter-spacing="4">
+    <text x="96" y="60">STACKLY</text>
+  </g>
+  
+  <!-- Subtle Tagline / Subtitle: CONSULTING -->
+  <g fill="#06b6d4" font-family="'Poppins', 'Inter', -apple-system, sans-serif" font-weight="600" font-size="9" letter-spacing="5.5" opacity="0.9">
+    <text x="98" y="77">CONSULTING</text>
+  </g>
+</svg>

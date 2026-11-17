@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Explore WorkNest Prime Properties - Handpicked Grade-A workspaces across Bangalore, Mumbai, Delhi, Hyderabad, and Pune.">
+  <title>Properties & Spaces | WorkNest Co-Working</title>
+  <link rel="icon" href="favicon.ico" type="image/x-icon">
+
+  <!-- Fonts & Icons -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Outfit:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" rel="stylesheet">
+
+  <!-- Core Stylesheets -->
+  <link rel="stylesheet" href="css/global.css">
+  <link rel="stylesheet" href="css/index.css">
+  <link rel="stylesheet" href="css/properties.css">
+</head>
+<body>
+
+  <!-- Ambient Glow & Particles -->
+  <div class="ambient-glow-wrapper" aria-hidden="true">
+    <div class="ambient-orb ambient-orb-1"></div>
+    <div class="ambient-orb ambient-orb-2"></div>
+  </div>
+  <canvas id="particleCanvas" aria-hidden="true"></canvas>
+
+  <div class="scroll-progress-bar" id="scrollProgressBar" aria-hidden="true"></div>
+  <div class="custom-cursor" aria-hidden="true"></div>
+  <div class="custom-cursor-follower" aria-hidden="true"></div>
+
+  <!-- ==================== FIXED NAVBAR ==================== -->
+  <nav class="navbar-custom" id="mainNavbar">
+    <div class="navbar-container">
+      <a href="index.html" class="logo" id="nav-brand-logo" aria-label="Brand Logo">
+        <img class="logo-img" src="images/stackly-logo.webp" alt="Stackly Logo">
+      </a>
+      <ul class="nav-menu-list">
+        <li><a href="index.html" class="nav-link-item">Home</a></li>
+        <li><a href="properties.html" class="nav-link-item active">Properties</a></li>
+        <li><a href="space-types.html" class="nav-link-item">Space Types</a></li>
+        <li><a href="about.html" class="nav-link-item">About Us</a></li>
+        <li><a href="contact.html" class="nav-link-item">Contact</a></li>
+      </ul>
+      <div class="nav-actions">
+        <a href="login.html" class="btn-magnetic btn-outline-glow btn-sm-custom nav-btn-login">Login</a>
+        <a href="get-started.html" class="btn-magnetic btn-primary-glow btn-sm-custom btn-shimmer nav-btn-getstarted"><span>Get Started</span></a>
+        <button class="navbar-toggle-btn" id="mobileToggleBtn" aria-label="Toggle Navigation">
+          <i class="bi bi-list"></i>
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Mobile Offcanvas Menu -->
+  <div class="mobile-nav-drawer" id="mobileNavDrawer" aria-hidden="true">
+    <div class="mobile-drawer-header">
+      <a href="index.html" class="logo">
+        <img class="logo-img" src="images/stackly-logo.webp" alt="Stackly Logo" style="height:36px;">
+      </a>
+      <button class="navbar-toggle-btn" id="closeDrawerBtn" aria-label="Close Menu"><i class="bi bi-x-lg"></i></button>
+    </div>
+    <ul class="mobile-nav-links">
+      <li><a href="index.html" class="mobile-nav-link">Home <i class="bi bi-chevron-right"></i></a></li>
+      <li><a href="properties.html" class="mobile-nav-link active">Properties <i class="bi bi-chevron-right"></i></a></li>
+      <li><a href="space-types.html" class="mobile-nav-link">Space Types <i class="bi bi-chevron-right"></i></a></li>
+      <li><a href="about.html" class="mobile-nav-link">About Us <i class="bi bi-chevron-right"></i></a></li>
+      <li><a href="contact.html" class="mobile-nav-link">Contact <i class="bi bi-chevron-right"></i></a></li>
+    </ul>
+    <div class="mobile-drawer-actions" style="padding: 20px 24px; display: flex; flex-direction: column; gap: 12px; margin-top: auto; border-top: 1px solid rgba(255, 255, 255, 0.08);">
+      <a href="login.html" class="btn-magnetic btn-outline-glow w-100 justify-content-center">Login</a>
+      <a href="get-started.html" class="btn-magnetic btn-primary-glow btn-shimmer w-100 justify-content-center"><span>Get Started</span></a>
+    </div></div>
+
+  <!-- ==================== PAGE HERO BANNER ==================== -->
+  <section class="page-hero-banner">
+    <div class="container-custom">
+      <div class="section-badge"><span class="badge-dot"></span> Grade-A Certified Real Estate</div>
+      <h1 class="section-title">Explore Premium Workspaces Across Metros</h1>
+      <p class="section-desc">
+        Discover thoughtfully architected private offices, high-capacity team suites, and flexible dedicated desks in 48+ premier business districts.
+      </p>
+    </div>
+  </section>
+
+  <!-- ==================== SEARCH & FILTER PANEL ==================== -->
+  <section style="position:relative; z-index:10; margin-bottom:50px;">
+    <div class="container-custom">
+      <div class="properties-search-panel" data-animate="fade-in" style="padding:16px 24px;">
+        <div class="filter-pills-row" style="margin-top:0; padding-top:0; border-top:none;">
+          <div class="d-flex align-items-center gap-2 flex-wrap" id="propCityFilterGroup">
+            <button class="filter-pill-btn active" data-city="all">All Cities</button>
+            <button class="filter-pill-btn" data-city="bangalore">Bangalore</button>
+            <button class="filter-pill-btn" data-city="mumbai">Mumbai</button>
+            <button class="filter-pill-btn" data-city="delhi">Delhi NCR</button>
+            <button class="filter-pill-btn" data-city="hyderabad">Hyderabad</button>
+            <button class="filter-pill-btn" data-city="pune">Pune</button>
+          </div>
+          <div style="font-size:0.85rem; color:var(--primary-light); font-weight:600;" id="propCountDisplay">
+            Showing 9 Verified Properties
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== PROPERTIES DIRECTORY GRID ==================== -->
+  <section class="section-padding" style="padding-top:0;">
+    <div class="container-custom">
+      <div class="card-equal-grid" id="propertiesListGrid">
+
+        <!-- 1: The Hive Bangalore -->
+        <div class="property-card-unified prop-card-item" data-city="bangalore" data-name="The Hive Innovation Campus" data-price="299">
+          <div class="property-thumb-container">
+            <img src="images/property-delhi.webp" alt="The Hive" class="property-thumb-img">
+            <span class="property-badge-tag">Hot Desk & Suite</span>
+            <span class="property-price-chip">$299/mo</span>
+          </div>
+          <div class="property-body-inner">
+            <h3 class="property-name-title">The Hive Innovation Campus</h3>
+            <div class="property-location-line"><i class="bi bi-geo-alt-fill"></i> Koramangala 4th Block, Bangalore</div>
+            <div class="property-amenities-row">
+              <span class="amenity-chip"><i class="bi bi-wifi"></i> 1 Gbps WiFi</span>
+              <span class="amenity-chip"><i class="bi bi-cup-hot"></i> Nitro Cafe</span>
+              <span class="amenity-chip"><i class="bi bi-p-square"></i> Valet Parking</span>
+            </div>
+            <div class="property-actions-pinned">
+              <span style="font-size:0.84rem; color:var(--primary-light); font-weight:600;">🟢 6 Desks Available</span>
+              <a href="404.html" class="btn-magnetic btn-primary-glow btn-sm-custom">Book Tour</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- 2: Nexus Hub Mumbai -->
+        <div class="property-card-unified prop-card-item" data-city="mumbai" data-name="Nexus Horizon Towers" data-price="599">
+          <div class="property-thumb-container">
+            <img src="images/property-hyderabad.webp" alt="Nexus Horizon Towers" class="property-thumb-img">
+            <span class="property-badge-tag">Private Suite</span>
+            <span class="property-price-chip">$599/mo</span>
+          </div>
+          <div class="property-body-inner">
+            <h3 class="property-name-title">Nexus Horizon Towers</h3>
+            <div class="property-location-line"><i class="bi bi-geo-alt-fill"></i> Bandra Kurla Complex (BKC), Mumbai</div>
+            <div class="property-amenities-row">
+              <span class="amenity-chip"><i class="bi bi-camera-video"></i> 4K Studios</span>
+              <span class="amenity-chip"><i class="bi bi-shield-lock"></i> Biometric Turnstiles</span>
+              <span class="amenity-chip"><i class="bi bi-ev-front"></i> EV Stations</span>
+            </div>
+            <div class="property-actions-pinned">
+              <span style="font-size:0.84rem; color:var(--primary-light); font-weight:600;">🟢 2 Suites Available</span>
+              <a href="404.html" class="btn-magnetic btn-primary-glow btn-sm-custom">Book Tour</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- 3: CyberOne Delhi -->
+        <div class="property-card-unified prop-card-item" data-city="delhi" data-name="CyberOne Tech Center" data-price="799">
+          <div class="property-thumb-container">
+            <img src="images/space-private-suite.webp" alt="CyberOne Tech Center" class="property-thumb-img">
+            <span class="property-badge-tag">Enterprise Floor</span>
+            <span class="property-price-chip">$799/mo</span>
+          </div>
+          <div class="property-body-inner">
+            <h3 class="property-name-title">CyberOne Tech Center</h3>
+            <div class="property-location-line"><i class="bi bi-geo-alt-fill"></i> DLF Cyber City, Gurugram (Delhi NCR)</div>
+            <div class="property-amenities-row">
+              <span class="amenity-chip"><i class="bi bi-train-front"></i> Metro Direct</span>
+              <span class="amenity-chip"><i class="bi bi-heart-pulse"></i> Gym & Wellness</span>
+              <span class="amenity-chip"><i class="bi bi-people"></i> Event Amphitheater</span>
+            </div>
+            <div class="property-actions-pinned">
+              <span style="font-size:0.84rem; color:var(--primary-light); font-weight:600;">🟢 Fast Filling</span>
+              <a href="404.html" class="btn-magnetic btn-primary-glow btn-sm-custom">Book Tour</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- 4: Silicon Matrix Hyderabad -->
+        <div class="property-card-unified prop-card-item" data-city="hyderabad" data-name="Silicon Matrix Pods" data-price="380">
+          <div class="property-thumb-container">
+            <img src="images/space-dedicated-desk.webp" alt="Silicon Matrix" class="property-thumb-img">
+            <span class="property-badge-tag">Dedicated Desks</span>
+            <span class="property-price-chip">$380/mo</span>
+          </div>
+          <div class="property-body-inner">
+            <h3 class="property-name-title">Silicon Matrix Pods</h3>
+            <div class="property-location-line"><i class="bi bi-geo-alt-fill"></i> Hitec City, Hyderabad</div>
+            <div class="property-amenities-row">
+              <span class="amenity-chip"><i class="bi bi-wifi"></i> WiFi 6E Mesh</span>
+              <span class="amenity-chip"><i class="bi bi-soundwave"></i> Soundproof Pods</span>
+              <span class="amenity-chip"><i class="bi bi-clock-history"></i> 24/7 Access</span>
+            </div>
+            <div class="property-actions-pinned">
+              <span style="font-size:0.84rem; color:var(--primary-light); font-weight:600;">🟢 8 Desks Left</span>
+              <a href="404.html" class="btn-magnetic btn-primary-glow btn-sm-custom">Book Tour</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- 5: The Glasshouse Bangalore -->
+        <div class="property-card-unified prop-card-item" data-city="bangalore" data-name="The Glasshouse Sanctuary" data-price="450">
+          <div class="property-thumb-container">
+            <img src="images/property-mumbai.webp" alt="The Glasshouse Sanctuary" class="property-thumb-img">
+            <span class="property-badge-tag">Biophilic Studio</span>
+            <span class="property-price-chip">$450/mo</span>
+          </div>
+          <div class="property-body-inner">
+            <h3 class="property-name-title">The Glasshouse Sanctuary</h3>
+            <div class="property-location-line"><i class="bi bi-geo-alt-fill"></i> 100ft Road, Indiranagar, Bangalore</div>
+            <div class="property-amenities-row">
+              <span class="amenity-chip"><i class="bi bi-flower1"></i> Indoor Garden</span>
+              <span class="amenity-chip"><i class="bi bi-mic"></i> Podcast Studio</span>
+              <span class="amenity-chip"><i class="bi bi-cup-hot"></i> Organic Barista</span>
+            </div>
+            <div class="property-actions-pinned">
+              <span style="font-size:0.84rem; color:var(--primary-light); font-weight:600;">🟢 4 Desks Left</span>
+              <a href="404.html" class="btn-magnetic btn-primary-glow btn-sm-custom">Book Tour</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- 6: Apex Bay Mumbai -->
+        <div class="property-card-unified prop-card-item" data-city="mumbai" data-name="Apex Bay Financial Hub" data-price="640">
+          <div class="property-thumb-container">
+            <img src="images/space-hot-desk.webp" alt="Apex Bay Financial Hub" class="property-thumb-img">
+            <span class="property-badge-tag">High Floor Ocean</span>
+            <span class="property-price-chip">$640/mo</span>
+          </div>
+          <div class="property-body-inner">
+            <h3 class="property-name-title">Apex Bay Financial Hub</h3>
+            <div class="property-location-line"><i class="bi bi-geo-alt-fill"></i> Lower Parel, Mumbai</div>
+            <div class="property-amenities-row">
+              <span class="amenity-chip"><i class="bi bi-water"></i> Sea Facing</span>
+              <span class="amenity-chip"><i class="bi bi-briefcase"></i> Legal Concierge</span>
+              <span class="amenity-chip"><i class="bi bi-shield-check"></i> Private Server Rack</span>
+            </div>
+            <div class="property-actions-pinned">
+              <span style="font-size:0.84rem; color:var(--primary-light); font-weight:600;">🟢 3 Desks Left</span>
+              <a href="404.html" class="btn-magnetic btn-primary-glow btn-sm-custom">Book Tour</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- 7: SkyTech Pune -->
+        <div class="property-card-unified prop-card-item" data-city="pune" data-name="SkyTech Altitude" data-price="275">
+          <div class="property-thumb-container">
+            <img src="images/property-bangalore.webp" alt="SkyTech Altitude" class="property-thumb-img">
+            <span class="property-badge-tag">Tech Scaleup</span>
+            <span class="property-price-chip">$275/mo</span>
+          </div>
+          <div class="property-body-inner">
+            <h3 class="property-name-title">SkyTech Altitude Hub</h3>
+            <div class="property-location-line"><i class="bi bi-geo-alt-fill"></i> Baner High Street, Pune</div>
+            <div class="property-amenities-row">
+              <span class="amenity-chip"><i class="bi bi-cloud"></i> Rooftop Cafe</span>
+              <span class="amenity-chip"><i class="bi bi-wifi"></i> Symmetrical Fiber</span>
+              <span class="amenity-chip"><i class="bi bi-p-square"></i> Covered Parking</span>
+            </div>
+            <div class="property-actions-pinned">
+              <span style="font-size:0.84rem; color:var(--primary-light); font-weight:600;">🟢 7 Desks Left</span>
+              <a href="404.html" class="btn-magnetic btn-primary-glow btn-sm-custom">Book Tour</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- 8: Connaught Prime Delhi -->
+        <div class="property-card-unified prop-card-item" data-city="delhi" data-name="Connaught Prime Heritage" data-price="420">
+          <div class="property-thumb-container">
+            <img src="images/space-boardroom.webp" alt="Connaught Prime" class="property-thumb-img">
+            <span class="property-badge-tag">Heritage Modern</span>
+            <span class="property-price-chip">$420/mo</span>
+          </div>
+          <div class="property-body-inner">
+            <h3 class="property-name-title">Connaught Prime Heritage</h3>
+            <div class="property-location-line"><i class="bi bi-geo-alt-fill"></i> Inner Circle, Connaught Place, New Delhi</div>
+            <div class="property-amenities-row">
+              <span class="amenity-chip"><i class="bi bi-train-front"></i> Metro 2m Away</span>
+              <span class="amenity-chip"><i class="bi bi-door-closed"></i> High Ceiling Suites</span>
+              <span class="amenity-chip"><i class="bi bi-cup-hot"></i> Barista</span>
+            </div>
+            <div class="property-actions-pinned">
+              <span style="font-size:0.84rem; color:var(--primary-light); font-weight:600;">🟢 5 Desks Left</span>
+              <a href="404.html" class="btn-magnetic btn-primary-glow btn-sm-custom">Book Tour</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- 9: Viman Greens Pune -->
+        <div class="property-card-unified prop-card-item" data-city="pune" data-name="Viman Greens EcoHub" data-price="310">
+          <div class="property-thumb-container">
+            <img src="images/space-community.webp" alt="Viman Greens EcoHub" class="property-thumb-img">
+            <span class="property-badge-tag">Zero Carbon</span>
+            <span class="property-price-chip">$310/mo</span>
+          </div>
+          <div class="property-body-inner">
+            <h3 class="property-name-title">Viman Greens EcoHub</h3>
+            <div class="property-location-line"><i class="bi bi-geo-alt-fill"></i> Viman Nagar, Pune (Near Airport)</div>
+            <div class="property-amenities-row">
+              <span class="amenity-chip"><i class="bi bi-airplane"></i> Airport Shuttle</span>
+              <span class="amenity-chip"><i class="bi bi-sun"></i> Solar Powered</span>
+              <span class="amenity-chip"><i class="bi bi-shield-check"></i> 24/7 Security</span>
+            </div>
+            <div class="property-actions-pinned">
+              <span style="font-size:0.84rem; color:var(--primary-light); font-weight:600;">🟢 4 Desks Left</span>
+              <a href="404.html" class="btn-magnetic btn-primary-glow btn-sm-custom">Book Tour</a>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+    <!-- ==================== FOOTER ==================== -->
+  <footer class="footer-master">
+    <div class="container-custom">
+      <div class="footer-grid-aligned">
+        <!-- Col 1: Brand & Bio -->
+        <div class="footer-col">
+          <a href="index.html" class="logo mb-3" style="display:inline-flex;">
+            <img class="logo-img" src="images/stackly-logo.webp" alt="WorkNest Stackly Logo">
+          </a>
+          <p class="footer-brand-desc">
+            Next-generation co-working spaces and enterprise office suites thoughtfully engineered for modern professionals, high-velocity creators, and ambitious teams.
+          </p>
+          <div class="footer-social-row">
+            <a href="404.html" class="social-circle-link" aria-label="LinkedIn" title="LinkedIn"><i class="bi bi-linkedin"></i></a>
+            <a href="404.html" class="social-circle-link" aria-label="Twitter / X" title="Twitter / X"><i class="bi bi-twitter-x"></i></a>
+            <a href="404.html" class="social-circle-link" aria-label="Instagram" title="Instagram"><i class="bi bi-instagram"></i></a>
+            <a href="404.html" class="social-circle-link" aria-label="GitHub" title="GitHub"><i class="bi bi-github"></i></a>
+          </div>
+        </div>
+
+        <!-- Col 2: Quick Links -->
+        <div class="footer-col">
+          <h4 class="footer-title">Quick Links</h4>
+          <ul class="footer-links-list">
+            <li><a href="index.html"><i class="bi bi-chevron-right"></i> Home</a></li>
+            <li><a href="properties.html"><i class="bi bi-chevron-right"></i> Properties</a></li>
+            <li><a href="space-types.html"><i class="bi bi-chevron-right"></i> Space Types</a></li>
+            <li><a href="about.html"><i class="bi bi-chevron-right"></i> About Us</a></li>
+            <li><a href="contact.html"><i class="bi bi-chevron-right"></i> Contact</a></li>
+          </ul>
+        </div>
+
+        <!-- Col 3: Top Metro Hubs (All Render to 404) -->
+        <div class="footer-col">
+          <h4 class="footer-title">Top Metro Hubs</h4>
+          <ul class="footer-links-list">
+            <li><a href="404.html"><i class="bi bi-geo-alt"></i> Bangalore (Koramangala, Indiranagar)</a></li>
+            <li><a href="404.html"><i class="bi bi-geo-alt"></i> Mumbai (BKC, Lower Parel)</a></li>
+            <li><a href="404.html"><i class="bi bi-geo-alt"></i> Delhi NCR (Cyber City, Noida)</a></li>
+            <li><a href="404.html"><i class="bi bi-geo-alt"></i> Hyderabad (Hitec City, Madhapur)</a></li>
+            <li><a href="404.html"><i class="bi bi-geo-alt"></i> Pune (Baner, Viman Nagar)</a></li>
+          </ul>
+        </div>
+
+        <!-- Col 4: Corporate Headquarters -->
+        <div class="footer-col">
+          <h4 class="footer-title">Corporate Headquarters</h4>
+          <div class="footer-contact-item">
+            <i class="bi bi-geo-alt-fill"></i>
+            <span>42 WorkNest Innovation Tower, 80ft Road, Koramangala 4th Block, Bangalore 560034</span>
+          </div>
+          <div class="footer-contact-item">
+            <i class="bi bi-envelope-fill"></i>
+            <a href="mailto:concierge@worknest.space" style="color: inherit; text-decoration: none;">concierge@worknest.space</a>
+          </div>
+          <div class="footer-contact-item">
+            <i class="bi bi-telephone-fill"></i>
+            <a href="tel:+918049208800" style="color: inherit; text-decoration: none;">+91 (080) 4920-8800 / +1 (800) 420-NEST</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Footer Bottom Copyright & Legal (All Legal Links Render to 404) -->
+      <div class="footer-bottom-bar">
+        <div>
+          &copy; 2026 WorkNest Global Workspaces Inc. All rights reserved.
+        </div>
+        <div class="footer-legal-links">
+          <a href="404.html">Privacy Policy</a>
+          <a href="404.html">Terms of Service</a>
+          <a href="404.html">Cookie Preferences</a>
+          <a href="404.html">Security & Compliance</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Modal -->
+  <div class="custom-modal-backdrop" id="tourModal" role="dialog" aria-modal="true">
+    <div class="custom-modal-dialog">
+      <div class="modal-header-custom">
+        <h3 style="font-size:1.3rem; margin:0; color:#ffffff;">Book a VIP Property Tour</h3>
+        <button class="modal-close-btn modal-close-trigger" aria-label="Close dialog"><i class="bi bi-x-lg"></i></button>
+      </div>
+      <div class="modal-body-custom">
+        <form id="tourBookingForm">
+          <div class="mb-3">
+            <label class="form-label" style="font-size:0.85rem; color:var(--text-muted); font-weight:600;">FULL NAME</label>
+            <input type="text" class="form-control" placeholder="e.g. Priya Nair" required style="background:rgba(255,255,255,0.05); border:1px solid var(--glass-border); color:#ffffff; border-radius:var(--radius-sm); padding:10px 14px;">
+          </div>
+          <div class="mb-3">
+            <label class="form-label" style="font-size:0.85rem; color:var(--text-muted); font-weight:600;">WORK EMAIL</label>
+            <input type="email" class="form-control" placeholder="priya@company.com" required style="background:rgba(255,255,255,0.05); border:1px solid var(--glass-border); color:#ffffff; border-radius:var(--radius-sm); padding:10px 14px;">
+          </div>
+          <div class="mb-4">
+            <label class="form-label" style="font-size:0.85rem; color:var(--text-muted); font-weight:600;">SELECTED PROPERTY</label>
+            <select class="form-select" id="modalSpaceSelect" style="background:#090f24; border:1px solid var(--glass-border); color:#ffffff; border-radius:var(--radius-sm); padding:10px 14px;">
+              <option value="The Hive Bangalore">The Hive Innovation Campus, Bangalore</option>
+              <option value="Nexus Horizon Mumbai">Nexus Horizon Towers, Mumbai</option>
+              <option value="CyberOne Gurugram">CyberOne Tech Center, Gurugram</option>
+              <option value="Silicon Matrix Hyderabad">Silicon Matrix Pods, Hyderabad</option>
+              <option value="The Glasshouse Bangalore">The Glasshouse Sanctuary, Bangalore</option>
+              <option value="Apex Bay Mumbai">Apex Bay Financial Hub, Mumbai</option>
+            </select>
+          </div>
+          <button type="submit" class="btn-magnetic btn-primary-glow w-100 btn-shimmer" style="padding:14px;">
+            Confirm VIP Tour & Day Pass
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <button class="back-to-top-btn" id="backToTopBtn" aria-label="Back to top">
+    <svg class="back-to-top-svg" viewBox="0 0 52 52">
+      <circle class="back-to-top-circle" id="backToTopCircle" cx="26" cy="26" r="24"></circle>
+    </svg>
+    <i class="bi bi-arrow-up"></i>
+  </button>
+
+  <script src="js/main.js"></script>
+  <script>
+    // Properties City Filter Script
+    const cityButtons = document.querySelectorAll('#propCityFilterGroup .filter-pill-btn');
+    const items = document.querySelectorAll('.prop-card-item');
+    const countDisplay = document.getElementById('propCountDisplay');
+
+    let currentCity = 'all';
+
+    function filterByCity() {
+      let visibleCount = 0;
+
+      items.forEach(item => {
+        const itemCity = item.getAttribute('data-city');
+        const matchesCity = (currentCity === 'all' || itemCity === currentCity);
+
+        if (matchesCity) {
+          item.style.display = 'flex';
+          visibleCount++;
+        } else {
+          item.style.display = 'none';
+        }
+      });
+
+      if (countDisplay) {
+        countDisplay.textContent = `Showing ${visibleCount} Verified ${visibleCount === 1 ? 'Property' : 'Properties'}`;
+      }
+    }
+
+    cityButtons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        cityButtons.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        currentCity = btn.getAttribute('data-city');
+        filterByCity();
+      });
+    });
+
+    // Auto select city from URL parameter ?city=bangalore
+    const urlParams = new URLSearchParams(window.location.search);
+    const paramCity = urlParams.get('city');
+    if (paramCity) {
+      const matchBtn = document.querySelector(`#propCityFilterGroup button[data-city="${paramCity}"]`);
+      if (matchBtn) matchBtn.click();
+    }
+  </script>
+</body>
+</html>

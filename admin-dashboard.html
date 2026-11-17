@@ -1,0 +1,1586 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Operations Command Center | WorkNest Co-Working</title>
+  <meta name="description" content="WorkNest Enterprise Administration Console - Real-time facility telemetry, workspace dispatch, member applications, and revenue analytics.">
+  
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Outfit:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  
+  <!-- Phosphor Icons -->
+  <link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.0.3/src/regular/style.css">
+  <link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.0.3/src/fill/style.css">
+  
+  <!-- Core Design System -->
+  <link rel="stylesheet" href="css/global.css">
+  <link rel="stylesheet" href="css/index.css">
+  <link rel="stylesheet" href="css/style.css">
+
+  <style>
+    :root {
+      --dash-sidebar-w: 280px;
+      --primary: #10b981;
+      --primary-light: #34d399;
+      --primary-dark: #059669;
+      --primary-rgb: 16, 185, 129;
+      --accent: #8b5cf6;
+      --accent-light: #a78bfa;
+      --cyan: #06b6d4;
+      --cyan-light: #38bdf8;
+      --amber: #f59e0b;
+      --amber-light: #fbbf24;
+      --rose: #f43f5e;
+      --rose-light: #fb7185;
+
+      /* High-Contrast Clear Typography Tokens */
+      --text-primary: #ffffff;
+      --text-secondary: #e2e8f0;
+      --text-muted: #cbd5e1;
+      --text-dim: #94a3b8;
+
+      --bg-card: rgba(12, 20, 44, 0.85);
+      --glass-border: rgba(255, 255, 255, 0.12);
+      --radius-xl: 20px;
+      --radius-lg: 16px;
+      --radius-md: 12px;
+      --radius-sm: 8px;
+      --radius-pill: 100px;
+      --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      --font-heading: 'Outfit', sans-serif;
+    }
+
+    body {
+      background-color: #050917;
+      color: #ffffff;
+      min-height: 100vh;
+      overflow-x: clip;
+      font-family: var(--font-sans);
+    }
+
+    .dash-layout-wrapper {
+      display: grid;
+      grid-template-columns: var(--dash-sidebar-w) 1fr;
+      min-height: 100vh;
+      position: relative;
+      z-index: 2;
+    }
+
+    /* Ambient background orbs */
+    .ambient-orb {
+      position: fixed;
+      border-radius: 50%;
+      filter: blur(140px);
+      pointer-events: none;
+      z-index: 1;
+    }
+    .orb-1 {
+      width: 500px;
+      height: 500px;
+      background: radial-gradient(circle, rgba(16, 185, 129, 0.25) 0%, transparent 70%);
+      top: -100px;
+      left: 200px;
+    }
+    .orb-2 {
+      width: 600px;
+      height: 600px;
+      background: radial-gradient(circle, rgba(139, 92, 246, 0.20) 0%, transparent 70%);
+      bottom: -150px;
+      right: 100px;
+    }
+
+    /* --- SIDEBAR --- */
+    .dash-sidebar {
+      background: rgba(8, 14, 34, 0.96);
+      border-right: 1px solid rgba(255, 255, 255, 0.12);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+      padding: 26px 20px;
+      display: flex;
+      flex-direction: column;
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      box-sizing: border-box;
+      z-index: 100;
+    }
+
+    .dash-brand-block {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-bottom: 24px;
+      padding-bottom: 18px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.10);
+    }
+
+    .sidebar-logo-img {
+      height: 40px;
+      width: auto;
+      filter: brightness(0) invert(1) drop-shadow(0 0 6px rgba(255, 255, 255, 0.5));
+      display: block;
+      transition: transform 0.2s ease;
+    }
+
+    .sidebar-logo-img:hover {
+      transform: scale(1.04);
+    }
+
+    .admin-role-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 12px;
+      border-radius: var(--radius-pill);
+      background: rgba(244, 63, 94, 0.16);
+      border: 1px solid rgba(244, 63, 94, 0.4);
+      color: #fb7185;
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      width: fit-content;
+    }
+
+    .dash-menu-nav {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      flex: 1;
+      overflow-y: auto;
+    }
+
+    .dash-nav-btn {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 14px;
+      border-radius: var(--radius-md);
+      background: transparent;
+      border: 1px solid transparent;
+      color: #e2e8f0 !important; /* Crisp high contrast white-slate */
+      font-size: 0.92rem;
+      font-weight: 600;
+      cursor: pointer;
+      text-decoration: none;
+      transition: all 0.2s ease;
+      box-sizing: border-box;
+      text-align: left;
+    }
+
+    .dash-nav-btn i {
+      font-size: 1.22rem;
+      color: #cbd5e1;
+      transition: color 0.2s ease;
+      flex-shrink: 0;
+    }
+
+    .dash-nav-btn:hover {
+      background: rgba(255, 255, 255, 0.08);
+      color: #ffffff !important;
+      border-color: rgba(255, 255, 255, 0.15);
+    }
+
+    .dash-nav-btn:hover i {
+      color: #34d399;
+    }
+
+    .dash-nav-btn.active {
+      background: linear-gradient(90deg, rgba(244, 63, 94, 0.24) 0%, rgba(16, 185, 129, 0.10) 100%) !important;
+      border: 1px solid rgba(244, 63, 94, 0.55) !important;
+      color: #ffffff !important;
+      font-weight: 700;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+    }
+
+    .dash-nav-btn.active i {
+      color: #fb7185 !important;
+    }
+
+    .dash-badge-count {
+      margin-left: auto;
+      padding: 2px 8px;
+      border-radius: 10px;
+      font-size: 0.74rem;
+      font-weight: 800;
+      background: rgba(244, 63, 94, 0.25);
+      color: #ffffff;
+      border: 1px solid rgba(244, 63, 94, 0.5);
+    }
+
+    .dash-sidebar-footer {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      padding-top: 18px;
+      border-top: 1px solid rgba(255, 255, 255, 0.10);
+    }
+
+    .switch-portal-link {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 11px 14px;
+      border-radius: var(--radius-sm);
+      background: rgba(16, 185, 129, 0.14) !important;
+      border: 1px solid rgba(16, 185, 129, 0.4) !important;
+      color: #34d399 !important;
+      font-size: 0.86rem;
+      font-weight: 700;
+      text-decoration: none;
+      transition: all 0.2s ease;
+    }
+
+    .switch-portal-link:hover {
+      background: rgba(16, 185, 129, 0.25) !important;
+      color: #ffffff !important;
+      transform: translateX(3px);
+    }
+
+    .logout-btn-link {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 14px;
+      background: rgba(244, 63, 94, 0.10);
+      border: 1px solid rgba(244, 63, 94, 0.3);
+      color: #fb7185 !important;
+      font-size: 0.88rem;
+      font-weight: 600;
+      text-decoration: none;
+      border-radius: var(--radius-sm);
+      transition: all 0.2s ease;
+    }
+
+    .logout-btn-link:hover {
+      background: rgba(244, 63, 94, 0.22) !important;
+      color: #ffffff !important;
+    }
+
+    /* --- TOP MOBILE BAR --- */
+    .dash-mobile-topbar {
+      display: none;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 20px;
+      background: rgba(8, 14, 34, 0.96) !important;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+      position: sticky !important;
+      top: 0 !important;
+      left: 0;
+      right: 0;
+      width: 100%;
+      box-sizing: border-box;
+      z-index: 999 !important;
+      backdrop-filter: blur(24px) !important;
+      -webkit-backdrop-filter: blur(24px) !important;
+      box-shadow: 0 4px 24px rgba(0, 0, 0, 0.5);
+    }
+    /* Mobile Logo Image - Guaranteed Pure White & Glowing */
+    .dash-mobile-logo-img {
+      height: 36px;
+      width: auto;
+      object-fit: contain;
+      filter: brightness(0) invert(1) drop-shadow(0 0 6px rgba(255, 255, 255, 0.6)) !important;
+      display: block;
+      transition: transform 0.2s ease, filter 0.2s ease;
+    }
+    .dash-mobile-logo-img:hover {
+      transform: scale(1.04);
+      filter: brightness(0) invert(1) drop-shadow(0 0 10px rgba(16, 185, 129, 0.8)) !important;
+    }
+
+    /* Backdrop Overlay for Mobile Sidebar - Positioned Under Sidebar, Above Content */
+    .dash-sidebar-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(3, 7, 18, 0.65);
+      z-index: 998;
+      opacity: 0;
+      transition: opacity 0.25s ease;
+      pointer-events: none;
+    }
+    .dash-sidebar-overlay.active {
+      display: block;
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+
+    /* --- MAIN CONTENT AREA --- */
+    .dash-main-stage {
+      padding: 36px 40px 60px;
+      display: flex;
+      flex-direction: column;
+      gap: 28px;
+      max-width: 1440px;
+      box-sizing: border-box;
+    }
+
+    .dash-top-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+
+    .dash-title-group h1 {
+      font-size: 1.85rem;
+      font-weight: 800;
+      color: #ffffff !important;
+      margin: 0 0 6px 0;
+      letter-spacing: -0.02em;
+      font-family: var(--font-heading);
+    }
+
+    .dash-header-sub {
+      color: #cbd5e1 !important; /* Crystal clear light gray/slate */
+      font-size: 0.92rem;
+      margin: 0;
+    }
+
+    .dash-header-sub strong {
+      color: #34d399 !important;
+      font-weight: 700;
+    }
+
+    .dash-header-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .dash-btn-outline {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 16px;
+      border-radius: var(--radius-sm);
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.22);
+      color: #ffffff !important;
+      font-size: 0.86rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .dash-btn-outline:hover {
+      background: rgba(255, 255, 255, 0.14);
+      border-color: #ffffff;
+      transform: translateY(-1px);
+    }
+
+    .dash-btn-primary {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 16px;
+      border-radius: var(--radius-sm);
+      background: linear-gradient(135deg, var(--primary) 0%, #059669 100%);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      color: #ffffff !important;
+      font-size: 0.86rem;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: 0 4px 16px rgba(16, 185, 129, 0.35);
+      transition: all 0.2s ease;
+    }
+
+    .dash-btn-primary:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 6px 22px rgba(16, 185, 129, 0.5);
+    }
+
+    .dash-header-user-badge {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      background: rgba(15, 23, 42, 0.88);
+      border: 1px solid rgba(255, 255, 255, 0.16);
+      padding: 6px 14px 6px 8px;
+      border-radius: var(--radius-pill);
+    }
+
+    .user-avatar-circle {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #f43f5e 0%, #ec4899 100%);
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 0.95rem;
+    }
+
+    /* --- KPI CARDS GRID --- */
+    .dash-kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 20px;
+    }
+
+    .dash-kpi-card {
+      padding: 22px 20px;
+      border-radius: var(--radius-xl);
+      background: rgba(12, 20, 44, 0.85) !important;
+      border: 1px solid rgba(255, 255, 255, 0.12) !important;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      transition: all 0.25s ease;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+    }
+
+    .dash-kpi-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 4px;
+      height: 100%;
+      background: var(--primary);
+    }
+
+    .dash-kpi-card.danger::before { background: #f43f5e; }
+    .dash-kpi-card.emerald::before { background: var(--primary); }
+    .dash-kpi-card.cyan::before { background: var(--cyan); }
+    .dash-kpi-card.amber::before { background: #f59e0b; }
+
+    .dash-kpi-card:hover {
+      transform: translateY(-4px);
+      border-color: rgba(255, 255, 255, 0.25);
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5), 0 0 25px rgba(16, 185, 129, 0.12);
+    }
+
+    .kpi-icon-pill {
+      width: 48px;
+      height: 48px;
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.45rem;
+      flex-shrink: 0;
+    }
+
+    .kpi-icon-pill.danger { background: rgba(244, 63, 94, 0.16); color: #fb7185; border: 1px solid rgba(244, 63, 94, 0.4); }
+    .kpi-icon-pill.emerald { background: rgba(16, 185, 129, 0.16); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.4); }
+    .kpi-icon-pill.cyan { background: rgba(6, 182, 212, 0.16); color: #38bdf8; border: 1px solid rgba(6, 182, 212, 0.4); }
+    .kpi-icon-pill.amber { background: rgba(245, 158, 11, 0.16); color: #fbbf24; border: 1px solid rgba(245, 158, 11, 0.4); }
+
+    .kpi-num {
+      font-size: 1.75rem;
+      font-weight: 800;
+      color: #ffffff !important;
+      line-height: 1.1;
+      margin-bottom: 4px;
+      letter-spacing: -0.02em;
+    }
+
+    .kpi-label {
+      font-size: 0.78rem;
+      color: #cbd5e1 !important; /* Crystal clear high-contrast label */
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+    }
+
+    .kpi-subtext {
+      font-size: 0.78rem;
+      margin-top: 5px;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      font-weight: 600;
+    }
+
+    /* --- PANELS VISIBILITY --- */
+    .dash-tab-panel {
+      display: none;
+      flex-direction: column;
+      gap: 24px;
+      animation: fadeInPanel 0.35s ease;
+    }
+
+    .dash-tab-panel.active-panel {
+      display: flex;
+    }
+
+    @keyframes fadeInPanel {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* --- DASHBOARD TABLES & CARDS --- */
+    .dash-table-box {
+      background: rgba(12, 20, 44, 0.85) !important;
+      border: 1px solid rgba(255, 255, 255, 0.12) !important;
+      border-radius: var(--radius-xl);
+      padding: 24px 26px;
+      overflow-x: auto;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+    }
+
+    .dash-section-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+      gap: 14px;
+    }
+
+    .dash-section-title {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: #ffffff !important;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-family: var(--font-heading);
+    }
+
+    .dash-table-box p {
+      color: #cbd5e1 !important; /* High contrast body text */
+      font-size: 0.88rem;
+      line-height: 1.5;
+    }
+
+    .dash-table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+    }
+
+    .dash-table th {
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: #cbd5e1 !important; /* Clearly readable column headers */
+      letter-spacing: 0.8px;
+      text-transform: uppercase;
+      padding: 14px 16px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.14) !important;
+      background: rgba(255, 255, 255, 0.03);
+    }
+
+    .dash-table td {
+      padding: 15px 16px;
+      font-size: 0.90rem;
+      color: #e2e8f0 !important; /* Clearly readable table text */
+      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+      vertical-align: middle;
+    }
+
+    .dash-table td strong {
+      color: #ffffff !important;
+      font-weight: 700;
+    }
+
+    .dash-table td small {
+      color: #94a3b8 !important; /* Readable secondary info */
+      font-size: 0.82rem;
+      display: block;
+      margin-top: 2px;
+    }
+
+    .dash-table tr:hover td {
+      background: rgba(255, 255, 255, 0.04);
+      color: #ffffff !important;
+    }
+
+    .status-badge-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 12px;
+      border-radius: var(--radius-pill);
+      font-size: 0.76rem;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+    }
+
+    .status-badge-pill.green { 
+      background: rgba(16, 185, 129, 0.20) !important; 
+      color: #34d399 !important; 
+      border: 1px solid rgba(16, 185, 129, 0.45) !important; 
+    }
+    .status-badge-pill.cyan { 
+      background: rgba(6, 182, 212, 0.20) !important; 
+      color: #38bdf8 !important; 
+      border: 1px solid rgba(6, 182, 212, 0.45) !important; 
+    }
+    .status-badge-pill.orange { 
+      background: rgba(245, 158, 11, 0.20) !important; 
+      color: #fbbf24 !important; 
+      border: 1px solid rgba(245, 158, 11, 0.45) !important; 
+    }
+    .status-badge-pill.red { 
+      background: rgba(244, 63, 94, 0.20) !important; 
+      color: #fb7185 !important; 
+      border: 1px solid rgba(244, 63, 94, 0.45) !important; 
+    }
+
+    /* METER BARS */
+    .meter-track {
+      width: 100%;
+      height: 8px;
+      background: rgba(255, 255, 255, 0.10);
+      border-radius: 4px;
+      overflow: hidden;
+      margin: 8px 0 4px;
+    }
+
+    .meter-fill {
+      height: 100%;
+      border-radius: 4px;
+      transition: width 0.6s ease;
+    }
+
+    .meter-fill.emerald { background: linear-gradient(90deg, #10b981, #059669); }
+    .meter-fill.cyan { background: linear-gradient(90deg, #06b6d4, #0284c7); }
+    .meter-fill.amber { background: linear-gradient(90deg, #f59e0b, #d97706); }
+    .meter-fill.danger { background: linear-gradient(90deg, #f43f5e, #e11d48); }
+
+    /* TOAST NOTIFICATION */
+    .dash-toast {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      background: rgba(15, 23, 42, 0.98);
+      border: 1px solid #10b981;
+      color: #ffffff;
+      padding: 14px 22px;
+      border-radius: var(--radius-md);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+      z-index: 9999;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      transform: translateY(100px);
+      opacity: 0;
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      pointer-events: none;
+    }
+
+    .dash-toast.show {
+      transform: translateY(0);
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    /* Responsive */
+    @media (max-width: 1200px) {
+      .dash-kpi-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+
+    @media (max-width: 900px) {
+      .dash-layout-wrapper {
+        grid-template-columns: 1fr;
+        position: static !important;
+        z-index: auto !important;
+      }
+      .dash-sidebar {
+        position: fixed !important;
+        left: -100% !important;
+        top: 0 !important;
+        bottom: 0 !important;
+        width: 300px !important;
+        max-width: 86vw !important;
+        height: 100vh !important;
+        height: 100dvh !important;
+        overflow-y: auto !important;
+        -webkit-overflow-scrolling: touch !important;
+        overscroll-behavior: contain !important;
+        z-index: 1050 !important;
+        display: flex !important;
+        flex-direction: column !important;
+        padding: 20px 18px 48px !important;
+        background: #080e24 !important;
+        border-right: 1px solid rgba(255, 255, 255, 0.12) !important;
+        box-shadow: 10px 0 40px rgba(0, 0, 0, 0.8) !important;
+        transition: left 0.3s cubic-bezier(0.16, 1, 0.3, 1) !important;
+      }
+      .dash-sidebar.active {
+        left: 0 !important;
+      }
+      .dash-sidebar::-webkit-scrollbar {
+        width: 5px;
+      }
+      .dash-sidebar::-webkit-scrollbar-track {
+        background: rgba(0, 0, 0, 0.2);
+      }
+      .dash-sidebar::-webkit-scrollbar-thumb {
+        background: rgba(255, 255, 255, 0.2);
+        border-radius: 4px;
+      }
+      .dash-sidebar-mobile-close-row {
+        display: flex !important;
+      }
+      .dash-sidebar > div:first-child {
+        flex-shrink: 0;
+      }
+      .dash-menu-nav {
+        overflow-y: visible !important;
+        flex-shrink: 0;
+      }
+      .dash-sidebar-footer {
+        flex-shrink: 0;
+        margin-top: 24px;
+        padding-top: 16px;
+        padding-bottom: 24px;
+      }
+      .dash-mobile-topbar {
+        display: flex !important;
+      }
+      .dash-main-stage {
+        padding: 24px 20px 40px;
+      }
+    }
+
+    @media (max-width: 600px) {
+      .dash-kpi-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Ambient Background Orbs -->
+  <div class="ambient-orb orb-1"></div>
+  <div class="ambient-orb orb-2"></div>
+
+  <!-- Mobile Sticky Top Bar -->
+  <div class="dash-mobile-topbar" id="adminMobileTopbar">
+    <a href="index.html" class="logo" style="display: inline-flex; align-items: center; text-decoration: none;" title="WorkNest Home">
+      <img class="dash-mobile-logo-img" src="images/stackly-logo.webp" alt="WorkNest Stackly Logo">
+    </a>
+    <button type="button" class="dash-btn-outline" id="adminMenuToggle" aria-label="Toggle Navigation" style="display: flex; align-items: center; justify-content: center; width: 42px; height: 42px; padding: 0; border-radius: 10px; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.15); color: #ffffff; cursor: pointer;">
+      <i class="ph-bold ph-list" style="font-size: 1.4rem;"></i>
+    </button>
+  </div>
+
+  <div class="dash-layout-wrapper">
+    <!-- Mobile Drawer Backdrop Overlay -->
+    <div class="dash-sidebar-overlay" id="adminSidebarOverlay"></div>
+
+    <!-- ============================================== -->
+    <!-- SIDEBAR NAVIGATION                             -->
+    <!-- ============================================== -->
+    <aside class="dash-sidebar" id="adminSidebar">
+      <div>
+        <!-- Mobile Header with Close Button -->
+        <div class="dash-sidebar-mobile-close-row" style="display: none; justify-content: space-between; align-items: center; margin-bottom: 16px; padding-bottom: 12px; border-bottom: 1px solid rgba(255, 255, 255, 0.08);">
+          <span style="font-size: 0.82rem; font-weight: 700; color: #cbd5e1; text-transform: uppercase; letter-spacing: 0.5px;">Navigation Menu</span>
+          <button type="button" id="adminSidebarClose" aria-label="Close Navigation" style="background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.15); color: #ffffff; border-radius: 8px; width: 34px; height: 34px; display: flex; align-items: center; justify-content: center; cursor: pointer;">
+            <i class="ph-bold ph-x" style="font-size: 1.15rem;"></i>
+          </button>
+        </div>
+
+        <!-- Brand Logo Block with Stackly Logo -->
+        <div class="dash-brand-block">
+          <a href="index.html" class="logo" style="display: flex; align-items: center; gap: 10px; text-decoration: none;">
+            <img class="sidebar-logo-img" src="images/stackly-logo.webp" alt="WorkNest Stackly Logo">
+          </a>
+          <div class="admin-role-badge">
+            <i class="ph-fill ph-shield-check"></i> Superuser Admin
+          </div>
+        </div>
+
+        <!-- 6 Dedicated Navigation Tabs -->
+        <ul class="dash-menu-nav">
+          <li>
+            <button type="button" class="dash-nav-btn active" data-tab="overview" onclick="switchAdminTab('overview')">
+              <i class="ph-fill ph-squares-four"></i>
+              <span>Operations Master</span>
+            </button>
+          </li>
+          <li>
+            <button type="button" class="dash-nav-btn" data-tab="dispatch" onclick="switchAdminTab('dispatch')">
+              <i class="ph-fill ph-compass"></i>
+              <span>Hub Space Dispatch</span>
+            </button>
+          </li>
+          <li>
+            <button type="button" class="dash-nav-btn" data-tab="maintenance" onclick="switchAdminTab('maintenance')">
+              <i class="ph-fill ph-broadcast"></i>
+              <span>Facility Telemetry</span>
+            </button>
+          </li>
+          <li>
+            <button type="button" class="dash-nav-btn" data-tab="inventory" onclick="switchAdminTab('inventory')">
+              <i class="ph-fill ph-package"></i>
+              <span>Resource Inventory</span>
+            </button>
+          </li>
+          <li>
+            <button type="button" class="dash-nav-btn" data-tab="tenants" onclick="switchAdminTab('tenants')">
+              <i class="ph-fill ph-buildings"></i>
+              <span>Corporate Accounts</span>
+            </button>
+          </li>
+          <li>
+            <button type="button" class="dash-nav-btn" data-tab="applications" onclick="switchAdminTab('applications')">
+              <i class="ph-fill ph-user-check"></i>
+              <span>Lease Approvals</span>
+              <span class="dash-badge-count" id="pendingAppsCount">14</span>
+            </button>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Bottom Actions -->
+      <div class="dash-sidebar-footer">
+        <a href="user-dashboard.html" class="switch-portal-link" title="Switch to Member Portal">
+          <span><i class="ph-fill ph-user-circle"></i> Member Portal</span>
+          <i class="ph ph-arrow-right"></i>
+        </a>
+        <a href="login.html" class="logout-btn-link">
+          <i class="ph ph-sign-out"></i>
+          <span>Sign Out</span>
+        </a>
+      </div>
+    </aside>
+
+    <!-- ============================================== -->
+    <!-- MAIN CONTENT VIEWPORT                          -->
+    <!-- ============================================== -->
+    <main class="dash-main-stage">
+      <!-- Shared Header -->
+      <header class="dash-top-header">
+        <div class="dash-title-group">
+          <h1>WorkNest Operations Command Center ⚡</h1>
+          <p class="dash-header-sub" id="adminPanelSubtitle">
+            <strong>● Rapid Telemetry: ACTIVE</strong> • 4 Metro Hubs Online (Bangalore, Mumbai, Delhi, Hyderabad)
+          </p>
+        </div>
+        <div class="dash-header-actions">
+          <button type="button" class="dash-btn-outline" onclick="showToast('Exporting Audited Hub Telemetry CSV...')">
+            <i class="ph ph-file-csv"></i> Export CSV
+          </button>
+          <button type="button" class="dash-btn-primary" onclick="showToast('Emergency facility telemetry synchronization active.')">
+            <i class="ph-fill ph-broadcast"></i> Facility Sync
+          </button>
+          <div class="dash-header-user-badge">
+            <div class="user-avatar-circle">BG</div>
+            <div>
+              <div style="font-size: 0.88rem; font-weight: 700; color: #ffffff;">Bhargavi G.</div>
+              <div style="font-size: 0.74rem; color: #fb7185; font-weight: 600;">Chief Operations Officer</div>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <!-- ============================================== -->
+      <!-- TAB 1: OPERATIONS MASTER (tab-overview)       -->
+      <!-- ============================================== -->
+      <section class="dash-tab-panel active-panel" id="tab-overview">
+        <!-- 4 KPI Metrics -->
+        <div class="dash-kpi-grid">
+          <div class="dash-kpi-card emerald">
+            <div class="kpi-icon-pill emerald"><i class="ph-fill ph-buildings"></i></div>
+            <div>
+              <div class="kpi-num">94.2%</div>
+              <div class="kpi-label">Active Hub Occupancy</div>
+              <div class="kpi-subtext" style="color: #34d399;"><i class="ph-fill ph-trend-up"></i> 188 / 200 Suites Occupied</div>
+            </div>
+          </div>
+
+          <div class="dash-kpi-card cyan">
+            <div class="kpi-icon-pill cyan"><i class="ph-fill ph-identification-badge"></i></div>
+            <div>
+              <div class="kpi-num">642</div>
+              <div class="kpi-label">Today's Member Check-ins</div>
+              <div class="kpi-subtext" style="color: #38bdf8;"><i class="ph-fill ph-check-circle"></i> Turnstiles & NFC Active</div>
+            </div>
+          </div>
+
+          <div class="dash-kpi-card amber">
+            <div class="kpi-icon-pill amber"><i class="ph-fill ph-currency-circle-dollar"></i></div>
+            <div>
+              <div class="kpi-num">₹1.48 Cr</div>
+              <div class="kpi-label">Monthly Gross MRR</div>
+              <div class="kpi-subtext" style="color: #fbbf24;"><i class="ph-fill ph-lightning"></i> 108% against Target</div>
+            </div>
+          </div>
+
+          <div class="dash-kpi-card danger">
+            <div class="kpi-icon-pill danger"><i class="ph-fill ph-bell-ringing"></i></div>
+            <div>
+              <div class="kpi-num">14</div>
+              <div class="kpi-label">Pending Tour & Leases</div>
+              <div class="kpi-subtext" style="color: #fb7185;"><i class="ph-fill ph-clock"></i> 4 Require Fast Approval</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Telemetry Highlights Grid -->
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 20px;">
+          <!-- Real-Time Facility Alert -->
+          <div class="dash-table-box" style="margin-bottom: 0;">
+            <div class="dash-section-header">
+              <span class="dash-section-title"><i class="ph-fill ph-shield-warning" style="color: #fb7185;"></i> Hub Infrastructure Status</span>
+              <span class="status-badge-pill green">All Systems Normal</span>
+            </div>
+            <p style="font-size: 0.92rem; color: #ffffff; font-weight: 700; margin: 0 0 6px 0;">
+              Indiranagar 100ft Rd — Floor 3 & 4 Power Grid Dual Redundant
+            </p>
+            <p style="color: #cbd5e1; font-size: 0.86rem; margin: 0 0 12px 0;">
+              Primary Leased Line (Tata Communications 10 Gbps) latency: 2.1ms • Backup line on standby.
+            </p>
+            <div class="meter-track"><div class="meter-fill emerald" style="width: 98%;"></div></div>
+            <span style="font-size: 0.78rem; color: #94a3b8; display: block; margin-top: 6px; font-weight: 500;">
+              Fiber Bandwidth: 2.4 Gbps / 10 Gbps Active Load
+            </span>
+          </div>
+
+          <!-- Capacity Meter Alert -->
+          <div class="dash-table-box" style="margin-bottom: 0;">
+            <div class="dash-section-header">
+              <span class="dash-section-title"><i class="ph-fill ph-cube" style="color: var(--cyan-light);"></i> Cyber Suite Reservation Load</span>
+              <span class="status-badge-pill cyan">High Demand</span>
+            </div>
+            <div style="display: flex; justify-content: space-between; font-size: 0.88rem; color: #ffffff; font-weight: 600;">
+              <span>Executive Private Suites</span>
+              <strong style="color: #34d399;">48 / 50 Suites (96%)</strong>
+            </div>
+            <div class="meter-track"><div class="meter-fill danger" style="width: 96%;"></div></div>
+            <div style="display: flex; justify-content: space-between; font-size: 0.88rem; color: #ffffff; font-weight: 600; margin-top: 14px;">
+              <span>Dedicated Team Bays</span>
+              <strong style="color: #fbbf24;">140 / 150 Desks (93%)</strong>
+            </div>
+            <div class="meter-track"><div class="meter-fill amber" style="width: 93%;"></div></div>
+          </div>
+        </div>
+
+        <!-- Live Operations Telemetry Feed Table -->
+        <div class="dash-table-box">
+          <div class="dash-section-header">
+            <span class="dash-section-title"><i class="ph-fill ph-activity" style="color: #34d399;"></i> Live Member Access & Hub Telemetry Stream</span>
+            <button type="button" class="dash-btn-outline" style="padding: 6px 14px; font-size: 0.82rem;" onclick="showToast('Refreshing live telemetry logs...')">
+              <i class="ph ph-arrows-clockwise"></i> Refresh Feed
+            </button>
+          </div>
+          <table class="dash-table">
+            <thead>
+              <tr>
+                <th>Timestamp</th>
+                <th>Member / Company</th>
+                <th>Location Hub</th>
+                <th>Space Reserved</th>
+                <th>Biometric Check-in</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>10:42 AM</strong></td>
+                <td><strong>Anthropic Frontier Labs</strong><small>Dr. Ethan Clark (VP)</small></td>
+                <td>Indiranagar, Bangalore</td>
+                <td>Private Suite 402 (Floor 4)</td>
+                <td><span class="status-badge-pill green"><i class="ph-fill ph-check"></i> Turnstile 01 Verified</span></td>
+                <td><span class="status-badge-pill green">Active On-Site</span></td>
+              </tr>
+              <tr>
+                <td><strong>10:38 AM</strong></td>
+                <td><strong>OpenAI Research Pod</strong><small>Maya Lin (Principal)</small></td>
+                <td>Koramangala 80ft, Bangalore</td>
+                <td>Quantum Boardroom</td>
+                <td><span class="status-badge-pill cyan"><i class="ph-fill ph-identification-badge"></i> Smart Fob Pass</span></td>
+                <td><span class="status-badge-pill cyan">In Session</span></td>
+              </tr>
+              <tr>
+                <td><strong>10:29 AM</strong></td>
+                <td><strong>Stripe Payments India</strong><small>Vikram Sen (Director)</small></td>
+                <td>BKC Bandra, Mumbai</td>
+                <td>Executive Wing A</td>
+                <td><span class="status-badge-pill green"><i class="ph-fill ph-fingerprint"></i> Biometric Facial</span></td>
+                <td><span class="status-badge-pill green">Active On-Site</span></td>
+              </tr>
+              <tr>
+                <td><strong>10:15 AM</strong></td>
+                <td><strong>Razorpay Product Hub</strong><small>Pooja Sharma (Lead PM)</small></td>
+                <td>Cyber City, Gurugram</td>
+                <td>Team Bay 12 (Floor 3)</td>
+                <td><span class="status-badge-pill green"><i class="ph-fill ph-qr-code"></i> Mobile QR NFC</span></td>
+                <td><span class="status-badge-pill green">Active On-Site</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- ============================================== -->
+      <!-- TAB 2: HUB SPACE DISPATCH (tab-dispatch)       -->
+      <!-- ============================================== -->
+      <section class="dash-tab-panel" id="tab-dispatch">
+        <div class="dash-table-box">
+          <div class="dash-section-header">
+            <div>
+              <span class="dash-section-title"><i class="ph-fill ph-compass" style="color: #38bdf8;"></i> Real-time Space Allocation & Hub Dispatch</span>
+              <p style="color: #cbd5e1; font-size: 0.88rem; margin: 4px 0 0 0;">
+                Live inventory tracking across all 4 metropolitan enterprise campuses.
+              </p>
+            </div>
+            <button type="button" class="dash-btn-primary" onclick="showToast('Auto-rebalancing desks across Floor 3 & 4...')">
+              <i class="ph-fill ph-sparkle"></i> Auto-Balance Desks
+            </button>
+          </div>
+
+          <table class="dash-table">
+            <thead>
+              <tr>
+                <th>Space Unit</th>
+                <th>Hub Campus</th>
+                <th>Tenant / Organization</th>
+                <th>Tier / Allocation</th>
+                <th>Access Badges</th>
+                <th>Occupancy</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Suite #402</strong><small>Executive Cyber Bay</small></td>
+                <td>Indiranagar, Bangalore</td>
+                <td><strong>Anthropic Labs</strong></td>
+                <td><span class="status-badge-pill cyan">24/7 Enterprise</span></td>
+                <td>25 Active Cards</td>
+                <td><span class="status-badge-pill green">22 / 25 In Hub</span></td>
+                <td><button type="button" class="dash-btn-outline" style="padding: 4px 10px; font-size: 0.78rem;" onclick="showToast('Locking down Suite #402 smart lock')">Smart Lock</button></td>
+              </tr>
+              <tr>
+                <td><strong>Suite #301</strong><small>Private Scale Bay</small></td>
+                <td>Koramangala, Bangalore</td>
+                <td><strong>Zepto Quick-Commerce</strong></td>
+                <td><span class="status-badge-pill cyan">Dedicated Suite</span></td>
+                <td>40 Active Cards</td>
+                <td><span class="status-badge-pill green">38 / 40 In Hub</span></td>
+                <td><button type="button" class="dash-btn-outline" style="padding: 4px 10px; font-size: 0.78rem;" onclick="showToast('Adjusting HVAC zone Suite #301')">HVAC</button></td>
+              </tr>
+              <tr>
+                <td><strong>Wing 5B</strong><small>Full Floor Lease</small></td>
+                <td>BKC Bandra, Mumbai</td>
+                <td><strong>Stripe Technologies</strong></td>
+                <td><span class="status-badge-pill orange">Private Floorplate</span></td>
+                <td>65 Active Cards</td>
+                <td><span class="status-badge-pill green">59 / 65 In Hub</span></td>
+                <td><button type="button" class="dash-btn-outline" style="padding: 4px 10px; font-size: 0.78rem;" onclick="showToast('Generating BKC Wing 5B Audit')">Audit</button></td>
+              </tr>
+              <tr>
+                <td><strong>Bay #12</strong><small>Open Dedicated Pod</small></td>
+                <td>Cyber City, Gurugram</td>
+                <td><strong>Razorpay Core</strong></td>
+                <td><span class="status-badge-pill cyan">Dedicated Desks</span></td>
+                <td>30 Active Cards</td>
+                <td><span class="status-badge-pill orange">24 / 30 In Hub</span></td>
+                <td><button type="button" class="dash-btn-outline" style="padding: 4px 10px; font-size: 0.78rem;" onclick="showToast('Keycard sync completed')">Sync NFC</button></td>
+              </tr>
+              <tr>
+                <td><strong>Studio Pod #04</strong><small>4K Podcast Studio</small></td>
+                <td>HITEC City, Hyderabad</td>
+                <td><strong>Founders Club Media</strong></td>
+                <td><span class="status-badge-pill green">Hourly Booking</span></td>
+                <td>4 Guests Allowed</td>
+                <td><span class="status-badge-pill green">Live Recording</span></td>
+                <td><button type="button" class="dash-btn-outline" style="padding: 4px 10px; font-size: 0.78rem;" onclick="showToast('Mic & Soundboard levels optimal')">AV Control</button></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- ============================================== -->
+      <!-- TAB 3: FACILITY TELEMETRY (tab-maintenance)     -->
+      <!-- ============================================== -->
+      <section class="dash-tab-panel" id="tab-maintenance">
+        <!-- Infrastructure Cards -->
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px;">
+          <div class="dash-table-box" style="margin-bottom: 0;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+              <span style="font-weight: 700; color: #ffffff;"><i class="ph-fill ph-wifi-high" style="color: #34d399;"></i> Dedicated Enterprise Fiber</span>
+              <span class="status-badge-pill green">99.99% SLA</span>
+            </div>
+            <p style="font-size: 0.88rem; color: #cbd5e1; margin: 0 0 8px 0;">Dual ISP Uplinks: Tata 10Gbps & Airtel 10Gbps active failover.</p>
+            <div class="meter-track"><div class="meter-fill emerald" style="width: 99%;"></div></div>
+            <span style="font-size: 0.78rem; color: #34d399; display: block; margin-top: 5px; font-weight: 600;">Zero packet loss recorded last 72 hours.</span>
+          </div>
+
+          <div class="dash-table-box" style="margin-bottom: 0;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+              <span style="font-weight: 700; color: #ffffff;"><i class="ph-fill ph-wind" style="color: #38bdf8;"></i> Smart HVAC & Air Quality</span>
+              <span class="status-badge-pill green">AQI 14 (Pure)</span>
+            </div>
+            <p style="font-size: 0.88rem; color: #cbd5e1; margin: 0 0 8px 0;">Hospital-grade HEPA filters & smart airflow balancing 21.5°C.</p>
+            <div class="meter-track"><div class="meter-fill cyan" style="width: 92%;"></div></div>
+            <span style="font-size: 0.78rem; color: #38bdf8; display: block; margin-top: 5px; font-weight: 600;">Zones 1 through 8 calibrated automatically.</span>
+          </div>
+
+          <div class="dash-table-box" style="margin-bottom: 0;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+              <span style="font-weight: 700; color: #ffffff;"><i class="ph-fill ph-lightning" style="color: #fbbf24;"></i> Power Grid & UPS Reserve</span>
+              <span class="status-badge-pill green">100% Health</span>
+            </div>
+            <p style="font-size: 0.88rem; color: #cbd5e1; margin: 0 0 8px 0;">Schneider Electric 500kVA Industrial UPS + Silent Generator.</p>
+            <div class="meter-track"><div class="meter-fill amber" style="width: 100%;"></div></div>
+            <span style="font-size: 0.78rem; color: #fbbf24; display: block; margin-top: 5px; font-weight: 600;">Instant zero-second transfer test passed.</span>
+          </div>
+        </div>
+
+        <!-- Maintenance Ticket Queue -->
+        <div class="dash-table-box">
+          <div class="dash-section-header">
+            <span class="dash-section-title"><i class="ph-fill ph-wrench" style="color: #fb7185;"></i> Facility Resolution & Maintenance Log</span>
+            <button type="button" class="dash-btn-outline" style="padding: 6px 14px; font-size: 0.82rem;" onclick="showToast('All facility tickets are currently up to date')">Log New Work Order</button>
+          </div>
+
+          <table class="dash-table">
+            <thead>
+              <tr>
+                <th>Ticket ID</th>
+                <th>Facility Node</th>
+                <th>Category</th>
+                <th>Assigned Engineer</th>
+                <th>Reported Time</th>
+                <th>Status</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>#WO-4081</strong></td>
+                <td>Acoustic Pod #3 (Floor 2)</td>
+                <td>HDMI & AV Display Cable Check</td>
+                <td>Ramesh K. (AV Tech)</td>
+                <td>Today, 09:15 AM</td>
+                <td><span class="status-badge-pill green">Resolved ✓</span></td>
+                <td><button type="button" class="dash-btn-outline" style="padding: 4px 10px; font-size: 0.78rem;" onclick="showToast('Work order #WO-4081 archived')">View Log</button></td>
+              </tr>
+              <tr>
+                <td><strong>#WO-4083</strong></td>
+                <td>Barista Station (Central Lounge)</td>
+                <td>Espresso Machine Water Filter Descale</td>
+                <td>Artisan Coffee Team</td>
+                <td>Today, 10:00 AM</td>
+                <td><span class="status-badge-pill cyan">In Progress</span></td>
+                <td><button type="button" class="dash-btn-outline" style="padding: 4px 10px; font-size: 0.78rem;" onclick="showToast('Dispatched barista technician')">Dispatch</button></td>
+              </tr>
+              <tr>
+                <td><strong>#WO-4086</strong></td>
+                <td>Conference Room 4B</td>
+                <td>Ergonomic Gas-Lift Chair Replacement</td>
+                <td>Sunil Verma (Facility)</td>
+                <td>Today, 10:20 AM</td>
+                <td><span class="status-badge-pill orange">Parts Dispatched</span></td>
+                <td><button type="button" class="dash-btn-outline" style="padding: 4px 10px; font-size: 0.78rem;" onclick="showToast('Tracking delivery from central depot')">Track</button></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- ============================================== -->
+      <!-- TAB 4: RESOURCE INVENTORY (tab-inventory)      -->
+      <!-- ============================================== -->
+      <section class="dash-tab-panel" id="tab-inventory">
+        <div class="dash-table-box">
+          <div class="dash-section-header">
+            <div>
+              <span class="dash-section-title"><i class="ph-fill ph-package" style="color: #34d399;"></i> Tech & Ergonomic Furniture Asset Telemetry</span>
+              <p style="color: #cbd5e1; font-size: 0.88rem; margin: 4px 0 0 0;">
+                Real-time RFID scan of physical assets, computing monitors, and lounge provisions.
+              </p>
+            </div>
+            <button type="button" class="dash-btn-outline" style="padding: 6px 14px; font-size: 0.82rem;" onclick="showToast('Procurement order generated for coffee & badges')">
+              <i class="ph ph-shopping-cart"></i> Generate Restock PO
+            </button>
+          </div>
+
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; margin-top: 14px;">
+            <div style="background: rgba(255, 255, 255, 0.04); border: 1px solid rgba(255, 255, 255, 0.12); padding: 18px; border-radius: var(--radius-lg);">
+              <div style="display: flex; justify-content: space-between; font-size: 0.90rem; color: #ffffff; font-weight: 600;">
+                <span>Herman Miller Embody Chairs</span>
+                <span style="color: #fbbf24; font-weight: 700;">246 / 260 Allocated (95%)</span>
+              </div>
+              <div class="meter-track"><div class="meter-fill amber" style="width: 95%;"></div></div>
+              <span style="font-size: 0.78rem; color: #94a3b8; display: block; margin-top: 4px;">14 units reserved for incoming Enterprise wing.</span>
+            </div>
+
+            <div style="background: rgba(255, 255, 255, 0.04); border: 1px solid rgba(255, 255, 255, 0.12); padding: 18px; border-radius: var(--radius-lg);">
+              <div style="display: flex; justify-content: space-between; font-size: 0.90rem; color: #ffffff; font-weight: 600;">
+                <span>4K UltraWide Curved Docks</span>
+                <span style="color: #fb7185; font-weight: 700;">114 / 120 In Use (95%)</span>
+              </div>
+              <div class="meter-track"><div class="meter-fill danger" style="width: 95%;"></div></div>
+              <span style="font-size: 0.78rem; color: #94a3b8; display: block; margin-top: 4px;">6 docks in tech staging lab for calibration.</span>
+            </div>
+
+            <div style="background: rgba(255, 255, 255, 0.04); border: 1px solid rgba(255, 255, 255, 0.12); padding: 18px; border-radius: var(--radius-lg);">
+              <div style="display: flex; justify-content: space-between; font-size: 0.90rem; color: #ffffff; font-weight: 600;">
+                <span>Soundproof Phone Booths</span>
+                <span style="color: #34d399; font-weight: 700;">14 / 16 Available</span>
+              </div>
+              <div class="meter-track"><div class="meter-fill emerald" style="width: 87%;"></div></div>
+              <span style="font-size: 0.78rem; color: #94a3b8; display: block; margin-top: 4px;">Acoustic seals checked today at 08:00 AM.</span>
+            </div>
+
+            <div style="background: rgba(255, 255, 255, 0.04); border: 1px solid rgba(255, 255, 255, 0.12); padding: 18px; border-radius: var(--radius-lg);">
+              <div style="display: flex; justify-content: space-between; font-size: 0.90rem; color: #ffffff; font-weight: 600;">
+                <span>Artisan Espresso Beans (Single Origin)</span>
+                <span style="color: #34d399; font-weight: 700;">48 kg In Stock (Optimal)</span>
+              </div>
+              <div class="meter-track"><div class="meter-fill emerald" style="width: 80%;"></div></div>
+              <span style="font-size: 0.78rem; color: #94a3b8; display: block; margin-top: 4px;">Blue Tokai Dark Roast & Araku Valley Arabica.</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============================================== -->
+      <!-- TAB 5: CORPORATE ACCOUNTS (tab-tenants)        -->
+      <!-- ============================================== -->
+      <section class="dash-tab-panel" id="tab-tenants">
+        <!-- Revenue Breakdown Overview -->
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px;">
+          <div style="background: rgba(12, 20, 44, 0.85); border: 1px solid rgba(255, 255, 255, 0.12); padding: 22px; border-radius: var(--radius-xl);">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+              <span style="font-weight: 700; color: #ffffff;">Enterprise Dedicated Wings</span>
+              <span style="font-weight: 800; color: #34d399;">58% (₹85.8L/mo)</span>
+            </div>
+            <div class="meter-track"><div class="meter-fill emerald" style="width: 58%;"></div></div>
+            <p style="color: #cbd5e1; font-size: 0.84rem; margin: 8px 0 0 0;">Long-term annual contracts with multi-floor tech unicorns.</p>
+          </div>
+
+          <div style="background: rgba(12, 20, 44, 0.85); border: 1px solid rgba(255, 255, 255, 0.12); padding: 22px; border-radius: var(--radius-xl);">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+              <span style="font-weight: 700; color: #ffffff;">Dedicated Team Desks</span>
+              <span style="font-weight: 800; color: #38bdf8;">26% (₹38.5L/mo)</span>
+            </div>
+            <div class="meter-track"><div class="meter-fill cyan" style="width: 26%;"></div></div>
+            <p style="color: #cbd5e1; font-size: 0.84rem; margin: 8px 0 0 0;">Growing venture-backed startups and engineering squads.</p>
+          </div>
+
+          <div style="background: rgba(12, 20, 44, 0.85); border: 1px solid rgba(255, 255, 255, 0.12); padding: 22px; border-radius: var(--radius-xl);">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+              <span style="font-weight: 700; color: #ffffff;">Event Spaces & Flex Pass</span>
+              <span style="font-weight: 800; color: #fbbf24;">16% (₹23.7L/mo)</span>
+            </div>
+            <div class="meter-track"><div class="meter-fill amber" style="width: 16%;"></div></div>
+            <p style="color: #cbd5e1; font-size: 0.84rem; margin: 8px 0 0 0;">Demo days, hackathons, podcast studios, day passes.</p>
+          </div>
+        </div>
+
+        <!-- Corporate Accounts Roster -->
+        <div class="dash-table-box">
+          <div class="dash-section-header">
+            <span class="dash-section-title"><i class="ph-fill ph-chart-line-up" style="color: #34d399;"></i> Active Corporate Accounts Ledger</span>
+            <button type="button" class="dash-btn-outline" style="padding: 6px 14px; font-size: 0.82rem;" onclick="showToast('Exporting corporate billing statements...')">Download Statement</button>
+          </div>
+
+          <table class="dash-table">
+            <thead>
+              <tr>
+                <th>Enterprise Tenant</th>
+                <th>HQ Campus</th>
+                <th>Seats Leased</th>
+                <th>Contract ARR</th>
+                <th>Renewal Date</th>
+                <th>Billing Status</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Stripe Technologies India</strong><small>Financial Infra</small></td>
+                <td>BKC Bandra, Mumbai</td>
+                <td>65 Dedicated Seats</td>
+                <td><strong style="color: #34d399;">₹1.10 Cr / yr</strong></td>
+                <td>Dec 31, 2027</td>
+                <td><span class="status-badge-pill green">Auto-Pay Active</span></td>
+                <td><button type="button" class="dash-btn-outline" style="padding: 4px 10px; font-size: 0.78rem;" onclick="showToast('Viewing Stripe master lease agreement')">Contract</button></td>
+              </tr>
+              <tr>
+                <td><strong>Anthropic Frontier Labs</strong><small>AI Research</small></td>
+                <td>Indiranagar, Bangalore</td>
+                <td>25 Executive Desks</td>
+                <td><strong style="color: #34d399;">₹54.0 L / yr</strong></td>
+                <td>Aug 15, 2027</td>
+                <td><span class="status-badge-pill green">Auto-Pay Active</span></td>
+                <td><button type="button" class="dash-btn-outline" style="padding: 4px 10px; font-size: 0.78rem;" onclick="showToast('Viewing Anthropic SLA tier')">Contract</button></td>
+              </tr>
+              <tr>
+                <td><strong>Zepto Quick-Commerce</strong><small>Logistics & Tech</small></td>
+                <td>Koramangala, Bangalore</td>
+                <td>40 Team Seats</td>
+                <td><strong style="color: #fbbf24;">₹69.6 L / yr</strong></td>
+                <td>Nov 30, 2026</td>
+                <td><span class="status-badge-pill cyan">Renewing</span></td>
+                <td><button type="button" class="dash-btn-outline" style="padding: 4px 10px; font-size: 0.78rem;" onclick="showToast('Initiating Zepto renewal agreement')">Renew</button></td>
+              </tr>
+              <tr>
+                <td><strong>Razorpay Software Pvt Ltd</strong><small>Core Engineering</small></td>
+                <td>Cyber City, Gurugram</td>
+                <td>30 Dedicated Desks</td>
+                <td><strong style="color: #34d399;">₹43.2 L / yr</strong></td>
+                <td>Mar 31, 2027</td>
+                <td><span class="status-badge-pill green">Auto-Pay Active</span></td>
+                <td><button type="button" class="dash-btn-outline" style="padding: 4px 10px; font-size: 0.78rem;" onclick="showToast('Viewing Razorpay team tier')">Contract</button></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- ============================================== -->
+      <!-- TAB 6: LEASE APPROVALS (tab-applications)     -->
+      <!-- ============================================== -->
+      <section class="dash-tab-panel" id="tab-applications">
+        <div class="dash-table-box">
+          <div class="dash-section-header">
+            <div>
+              <span class="dash-section-title"><i class="ph-fill ph-user-check" style="color: #fb7185;"></i> Inbound Lease Applications & VIP Tour Queue</span>
+              <p style="color: #cbd5e1; font-size: 0.88rem; margin: 4px 0 0 0;">
+                Review, conduct KYC compliance, and instantly issue biometric onboarding passes.
+              </p>
+            </div>
+            <button type="button" class="dash-btn-outline" style="padding: 6px 14px; font-size: 0.82rem;" onclick="showToast('Syncing with inbound inquiry webhooks...')">
+              <i class="ph ph-arrows-clockwise"></i> Sync Inquiries
+            </button>
+          </div>
+
+          <table class="dash-table">
+            <thead>
+              <tr>
+                <th>Applicant / Organization</th>
+                <th>Desired Space</th>
+                <th>Team Headcount</th>
+                <th>Target Move-In</th>
+                <th>KYC & Credit Status</th>
+                <th>Review Decision</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr id="app-row-1">
+                <td>
+                  <strong>Rohan & Ananya Varma</strong><br>
+                  <small>HyperScale Cloud (Funded Seed)</small>
+                </td>
+                <td>Private Suite 304 (Indiranagar)</td>
+                <td>12 Engineers</td>
+                <td>Dec 01, 2026</td>
+                <td><span class="status-badge-pill green"><i class="ph-fill ph-check"></i> GST & Credit Verified</span></td>
+                <td>
+                  <div style="display: flex; gap: 8px;">
+                    <button type="button" class="dash-btn-primary" style="padding: 5px 12px; font-size: 0.80rem;" onclick="approveApplication('app-row-1', 'HyperScale Cloud')">
+                      Approve Lease
+                    </button>
+                    <button type="button" class="dash-btn-outline" style="padding: 5px 12px; font-size: 0.80rem;" onclick="rejectApplication('app-row-1')">
+                      Reject
+                    </button>
+                  </div>
+                </td>
+              </tr>
+              <tr id="app-row-2">
+                <td>
+                  <strong>Kavita Pillai</strong><br>
+                  <small>Nexa Robotics Labs</small>
+                </td>
+                <td>Dedicated Bay B (Koramangala)</td>
+                <td>8 Researchers</td>
+                <td>Nov 25, 2026</td>
+                <td><span class="status-badge-pill green"><i class="ph-fill ph-check"></i> High Voltage Lab OK</span></td>
+                <td>
+                  <div style="display: flex; gap: 8px;">
+                    <button type="button" class="dash-btn-primary" style="padding: 5px 12px; font-size: 0.80rem;" onclick="approveApplication('app-row-2', 'Nexa Robotics')">
+                      Approve Lease
+                    </button>
+                    <button type="button" class="dash-btn-outline" style="padding: 5px 12px; font-size: 0.80rem;" onclick="rejectApplication('app-row-2')">
+                      Reject
+                    </button>
+                  </div>
+                </td>
+              </tr>
+              <tr id="app-row-3">
+                <td>
+                  <strong>David Miller</strong><br>
+                  <small>Silicon Valley Fintech Corp</small>
+                </td>
+                <td>Full Floorplate (BKC Mumbai)</td>
+                <td>50 Team Seats</td>
+                <td>Jan 15, 2027</td>
+                <td><span class="status-badge-pill orange"><i class="ph-fill ph-clock"></i> Legal Escrow Pending</span></td>
+                <td>
+                  <div style="display: flex; gap: 8px;">
+                    <button type="button" class="dash-btn-outline" style="padding: 5px 12px; font-size: 0.80rem;" onclick="showToast('Scheduling VIP Walkthrough with David Miller')">
+                      Schedule VIP Tour
+                    </button>
+                    <button type="button" class="dash-btn-outline" style="padding: 5px 12px; font-size: 0.80rem;" onclick="rejectApplication('app-row-3')">
+                      Reject
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <!-- Toast Notification element -->
+  <div class="dash-toast" id="dashToast">
+    <i class="ph-fill ph-check-circle" style="color: #34d399; font-size: 1.4rem;"></i>
+    <span id="dashToastText">Action executed successfully.</span>
+  </div>
+
+  <!-- Javascript -->
+  <script>
+    // Subtitles mapping per tab
+    const adminTabSubtitles = {
+      'overview': 'Rapid Telemetry: ACTIVE • 4 Metro Hubs Online (Bangalore, Mumbai, Delhi, Hyderabad)',
+      'dispatch': 'Real-time telemetry and space allocations across all private suites and team bays.',
+      'maintenance': 'IoT telemetry, high-speed fiber redundancy, and facilities engineering queue.',
+      'inventory': 'Real-time telemetry for ergonomic Herman Miller seating, 4K monitors, and pods.',
+      'tenants': 'Corporate enterprise client accounts, ARR revenue streams, and contract terms.',
+      'applications': 'Inbound member vetting, KYC compliance screening, and instant lease approvals.'
+    };
+
+    function switchAdminTab(tabId) {
+      // 1. Highlight sidebar buttons
+      document.querySelectorAll('.dash-nav-btn').forEach(btn => {
+        if (btn.getAttribute('data-tab') === tabId) {
+          btn.classList.add('active');
+        } else {
+          btn.classList.remove('active');
+        }
+      });
+
+      // 2. Switch visible panel
+      document.querySelectorAll('.dash-tab-panel').forEach(panel => {
+        if (panel.id === `tab-${tabId}`) {
+          panel.classList.add('active-panel');
+        } else {
+          panel.classList.remove('active-panel');
+        }
+      });
+
+      // 3. Update subtitle dynamically
+      const subEl = document.getElementById('adminPanelSubtitle');
+      if (subEl && adminTabSubtitles[tabId]) {
+        subEl.innerHTML = `<strong>● Console View:</strong> ${adminTabSubtitles[tabId]}`;
+      }
+
+      // 4. Update browser history hash
+      window.history.replaceState(null, '', `#${tabId}`);
+
+      // 5. Scroll smoothly to top
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+
+      // 6. Close mobile sidebar if open
+      const sidebar = document.getElementById('adminSidebar');
+      if (typeof closeAdminDrawer === 'function') { closeAdminDrawer(); } else if (sidebar) { sidebar.classList.remove('active'); }
+    }
+
+    // Application Approve / Reject handler
+    function approveApplication(rowId, orgName) {
+      const row = document.getElementById(rowId);
+      if (row) {
+        const actionCell = row.cells[5];
+        actionCell.innerHTML = `<span class="status-badge-pill green"><i class="ph-fill ph-check"></i> Approved & Onboarded</span>`;
+        row.style.background = 'rgba(16, 185, 129, 0.12)';
+        showToast(`Lease approved for ${orgName}! Welcome pack and NFC badges generated.`);
+        
+        // Decrement badge count
+        const countBadge = document.getElementById('pendingAppsCount');
+        if (countBadge) {
+          let curr = parseInt(countBadge.innerText) || 14;
+          if (curr > 0) countBadge.innerText = curr - 1;
+        }
+      }
+    }
+
+    function rejectApplication(rowId) {
+      const row = document.getElementById(rowId);
+      if (row) {
+        row.style.opacity = '0.35';
+        row.style.pointerEvents = 'none';
+        showToast('Application marked as archived / declined.');
+      }
+    }
+
+    // Toast helper
+    let toastTimeout;
+    function showToast(msg) {
+      const toast = document.getElementById('dashToast');
+      const text = document.getElementById('dashToastText');
+      if (!toast || !text) return;
+      text.innerText = msg;
+      toast.classList.add('show');
+      clearTimeout(toastTimeout);
+      toastTimeout = setTimeout(() => {
+        toast.classList.remove('show');
+      }, 3500);
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      // Mobile hamburger toggle with smooth scrolling & overlay
+      const toggle = document.getElementById('adminMenuToggle');
+      const sidebar = document.getElementById('adminSidebar');
+      const closeBtn = document.getElementById('adminSidebarClose');
+      const overlay = document.getElementById('adminSidebarOverlay');
+
+      function openAdminDrawer() {
+        if (sidebar) sidebar.classList.add('active');
+        if (overlay) overlay.classList.add('active');
+        document.body.style.overflowY = 'hidden';
+      }
+
+      function closeAdminDrawer() {
+        if (typeof closeAdminDrawer === 'function') { closeAdminDrawer(); } else if (sidebar) { sidebar.classList.remove('active'); }
+        if (overlay) overlay.classList.remove('active');
+        document.body.style.overflowY = '';
+      }
+
+      if (toggle) {
+        toggle.addEventListener('click', () => {
+          if (sidebar && sidebar.classList.contains('active')) {
+            closeAdminDrawer();
+          } else {
+            openAdminDrawer();
+          }
+        });
+      }
+      if (closeBtn) closeBtn.addEventListener('click', closeAdminDrawer);
+      if (overlay) overlay.addEventListener('click', closeAdminDrawer);
+
+      // Hash routing on load
+      const hash = window.location.hash.replace('#', '') || 'overview';
+      const validTabs = ['overview', 'dispatch', 'maintenance', 'inventory', 'tenants', 'applications'];
+      if (validTabs.includes(hash)) {
+        switchAdminTab(hash);
+      } else {
+        switchAdminTab('overview');
+      }
+    });
+  </script>
+</body>
+</html>

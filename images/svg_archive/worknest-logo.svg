@@ -1,0 +1,58 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 90" width="320" height="90" fill="none">
+  <defs>
+    <!-- Emerald Gradient -->
+    <linearGradient id="wnEmerald" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#34d399" />
+      <stop offset="50%" stop-color="#10b981" />
+      <stop offset="100%" stop-color="#047857" />
+    </linearGradient>
+
+    <!-- Cyan / Electric Accent Gradient -->
+    <linearGradient id="wnCyan" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#38bdf8" />
+      <stop offset="50%" stop-color="#06b6d4" />
+      <stop offset="100%" stop-color="#0284c7" />
+    </linearGradient>
+
+    <!-- Deep Slate Indigo Gradient -->
+    <linearGradient id="wnDark" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#6366f1" />
+      <stop offset="50%" stop-color="#4338ca" />
+      <stop offset="100%" stop-color="#1e1b4b" />
+    </linearGradient>
+
+    <!-- Glow Filter -->
+    <filter id="wnGlow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="0" stdDeviation="4" flood-color="#10b981" flood-opacity="0.45" />
+    </filter>
+  </defs>
+
+  <!-- Geometric Emblem Mark: 3D Interlocking Dynamic Nest Cube -->
+  <g transform="translate(15, 12)">
+    <!-- Top Face (Cyan) -->
+    <polygon points="34,6 64,22 34,38 4,22" fill="url(#wnCyan)" opacity="0.95" />
+    
+    <!-- Left Face (Deep Emerald) -->
+    <polygon points="4,24 34,40 34,74 4,58" fill="url(#wnEmerald)" filter="url(#wnGlow)" />
+    
+    <!-- Right Face (Electric Indigo / Dark) -->
+    <polygon points="34,40 64,24 64,58 34,74" fill="url(#wnDark)" />
+
+    <!-- Center Tech Core / Node -->
+    <circle cx="34" cy="40" r="4.5" fill="#ffffff" />
+    <circle cx="34" cy="40" r="8" stroke="#34d399" stroke-width="1.5" fill="none" opacity="0.8" />
+  </g>
+
+  <!-- Typography: WORKNEST -->
+  <g font-family="'Outfit', 'Inter', 'Poppins', sans-serif" font-weight="900" font-size="33" letter-spacing="3.5">
+    <!-- WORK (White) -->
+    <text x="96" y="52" fill="#ffffff">WORK</text>
+    <!-- NEST (Emerald Gradient) -->
+    <text x="206" y="52" fill="url(#wnEmerald)">NEST</text>
+  </g>
+
+  <!-- Subtitle Tagline: WORKSPACES & SUITES -->
+  <g fill="#94a3b8" font-family="'Inter', sans-serif" font-weight="600" font-size="8.5" letter-spacing="4.8" opacity="0.85">
+    <text x="98" y="70">PREMIUM WORKSPACES</text>
+  </g>
+</svg>

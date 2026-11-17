@@ -1,0 +1,171 @@
+function selectRole(role) {
+      currentRole = role;
+      document.getElementById('selectedRole').value = role;
+      hideRememberWarning();
+      clearErrors();
+
+      const userBtn = document.getElementById('userRoleBtn');
+      const adminBtn = document.getElementById('adminRoleBtn');
+      const heading = document.getElementById('loginHeading');
+      const subtext = document.getElementById('loginSubtext');
+      const submitBtn = document.getElementById('submitBtn');
+      const emailInput = document.getElementById('loginEmail');
+      const passwordInput = document.getElementById('loginPassword');
+
+      // Clear any typed values when toggling roles
+      emailInput.value = '';
+      passwordInput.value = '';
+
+      if (role === 'admin') {
+        userBtn.classList.remove('active');
+        adminBtn.classList.add('active', 'admin-mode');
+        heading.textContent = 'Sanctuary Admin Console';
+        subtext.textContent = 'Sign in to access 24/7 rescue dispatch telemetry, veterinary triage & operations control.';
+        submitBtn.textContent = 'Sign In to Admin Console →';
+        submitBtn.style.background = '#111827';
+        submitBtn.style.boxShadow = '0 4px 18px rgba(17, 24, 39, 0.3)';
+        emailInput.placeholder = 'admin@gmail.com';
+      } else {
+        adminBtn.classList.remove('active', 'admin-mode');
+        userBtn.classList.add('active');
+        heading.textContent = 'Guardian & Donor Portal';
+        subtext.textContent = 'Sign in to track your sponsored rescues, active recurring pledges & tax-deductible receipts.';
+        submitBtn.textContent = 'Sign In to Guardian Dashboard →';
+        submitBtn.style.background = 'var(--primary, #FF7B29)';
+        submitBtn.style.boxShadow = '0 4px 18px rgba(255, 123, 41, 0.35)';
+        emailInput.placeholder = 'yourname@gmail.com';
+      }
+    }
+
+    function clearErrors() {
+      const emailErr = document.getElementById('emailError');
+      const passErr = document.getElementById('passwordError');
+      const emailInp = document.getElementById('loginEmail');
+      const passInp = document.getElementById('loginPassword');
+      if (emailErr) emailErr.style.display = 'none';
+      if (passErr) passErr.style.display = 'none';
+      if (emailInp) emailInp.classList.remove('input-error');
+      if (passInp) passInp.classList.remove('input-error');
+    }
+
+    function hideRememberWarning() {
+      const warningBox = document.getElementById('rememberWarning');
+      const rememberLabel = document.getElementById('rememberLabel');
+      if (warningBox) warningBox.style.display = 'none';
+      if (rememberLabel) {
+        rememberLabel.style.background = 'transparent';
+        rememberLabel.style.color = '#475569';
+      }
+    }
+
+    // Input listeners to clear validation errors in real time
+    document.getElementById('loginEmail').addEventListener('input', function() {
+      const emailErr = document.getElementById('emailError');
+      this.classList.remove('input-error');
+      if (emailErr) emailErr.style.display = 'none';
+    });
+
+    document.getElementById('loginPassword').addEventListener('input', function() {
+      const passErr = document.getElementById('passwordError');
+      this.classList.remove('input-error');
+      if (passErr) passErr.style.display = 'none';
+    });
+
+    // Check Strong Password:
+    // At least 8 chars, at least 1 uppercase, 1 lowercase, 1 digit, 1 special character
+    function isStrongPassword(pwd) {
+      if (!pwd || pwd.length < 8) return false;
+      const hasUpper = /[A-Z]/.test(pwd);
+      const hasLower = /[a-z]/.test(pwd);
+      const hasNumber = /[0-9]/.test(pwd);
+      const hasSpecial = /[@$!%*?&#^()_+\-=\[\]{}|;:,.<>]/.test(pwd);
+      return hasUpper && hasLower && hasNumber && hasSpecial;
+    }
+
+    // Form Submission with Strict Validations
+    function handleLoginSubmit(e) {
+      e.preventDefault();
+      let isValid = true;
+
+      const role = document.getElementById('selectedRole').value;
+      const emailInput = document.getElementById('loginEmail');
+      const passwordInput = document.getElementById('loginPassword');
+      const rememberMeCheck = document.getElementById('rememberMeCheck');
+
+      const emailErr = document.getElementById('emailError');
+      const passErr = document.getElementById('passwordError');
+      const warningBox = document.getElementById('rememberWarning');
+      const rememberLabel = document.getElementById('rememberLabel');
+
+      const emailVal = emailInput.value.trim().toLowerCase();
+      const passVal = passwordInput.value;
+
+      // 1. Gmail format validation: strictly @gmail.com
+      const gmailRegex = /^[a-zA-Z0-9._%+-]+@gmail\.com$/;
+      if (!emailVal || !gmailRegex.test(emailVal)) {
+        emailInput.classList.add('input-error');
+        if (emailErr) emailErr.style.display = 'block';
+        isValid = false;
+      } else {
+        emailInput.classList.remove('input-error');
+        if (emailErr) emailErr.style.display = 'none';
+      }
+
+      // 2. Strong Password validation
+      if (!isStrongPassword(passVal)) {
+        passwordInput.classList.add('input-error');
+        if (passErr) passErr.style.display = 'block';
+        isValid = false;
+      } else {
+        passwordInput.classList.remove('input-error');
+        if (passErr) passErr.style.display = 'none';
+      }
+
+      // 3. Remember Me is MANDATORY
+      if (!rememberMeCheck.checked) {
+        if (warningBox) warningBox.style.display = 'block';
+        if (rememberLabel) {
+          rememberLabel.style.background = '#FEF2F2';
+          rememberLabel.style.color = '#DC2626';
+        }
+        isValid = false;
+      } else {
+        hideRememberWarning();
+      }
+
+      if (!isValid) {
+        return false;
+      }
+
+      // Save user state to localStorage
+      localStorage.setItem('pawshaven_remember_me', 'true');
+      localStorage.setItem('pawshaven_user_role', role);
+      localStorage.setItem('pawshaven_user_email', emailVal);
+      const extractedName = emailVal.split('@')[0].replace(/[._]/g, ' ');
+      const capitalized = extractedName.charAt(0).toUpperCase() + extractedName.slice(1);
+      localStorage.setItem('pawshaven_user_name', role === 'admin' ? 'Dr. Sarah Mitchell (Admin)' : (capitalized || 'Guardian Supporter'));
+
+      // Redirect to respective dashboard
+      if (role === 'admin') {
+        window.location.href = 'admin-dashboard.html';
+      } else {
+        window.location.href = 'user-dashboard.html';
+      }
+    }
+
+    function togglePasswordVisibility(inputId, btn) {
+      const input = document.getElementById(inputId);
+      const icon = btn.querySelector('i');
+      if (input.type === 'password') {
+        input.type = 'text';
+        icon.classList.remove('ph-eye');
+        icon.classList.add('ph-eye-slash');
+        btn.style.color = 'var(--primary, #FF7B29)';
+      } else {
+        input.type = 'password';
+        icon.classList.remove('ph-eye-slash');
+        icon.classList.add('ph-eye');
+        btn.style.color = '#64748B';
+      }
+    }
+  </script>

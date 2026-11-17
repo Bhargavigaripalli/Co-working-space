@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Book a VIP Tour at WorkNest — Complimentary 1-Day Pass, Barista Coffee, and Private Suite Walkthrough.">
+  <title>Book a VIP Tour | WorkNest Co-Working</title>
+  <link rel="icon" href="favicon.ico" type="image/x-icon">
+
+  <!-- Fonts & Icons -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Outfit:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" rel="stylesheet">
+
+  <link rel="stylesheet" href="css/global.css">
+  <link rel="stylesheet" href="css/index.css">
+  <style>
+    .time-slot-pill {
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid var(--glass-border);
+      border-radius: var(--radius-sm);
+      padding: 10px 14px;
+      text-align: center;
+      cursor: pointer;
+      color: var(--text-secondary);
+      font-size: 0.88rem;
+      font-weight: 600;
+      transition: all var(--transition-fast);
+    }
+    .time-slot-pill:hover {
+      background: rgba(255, 255, 255, 0.1);
+      color: #ffffff;
+    }
+    .time-slot-pill.active {
+      background: var(--primary);
+      border-color: var(--primary);
+      color: #ffffff;
+      box-shadow: 0 4px 14px rgba(var(--primary-rgb), 0.35);
+    }
+  </style>
+</head>
+<body>
+
+  <div class="ambient-glow-wrapper" aria-hidden="true">
+    <div class="ambient-orb ambient-orb-1"></div>
+    <div class="ambient-orb ambient-orb-2"></div>
+  </div>
+  <canvas id="particleCanvas" aria-hidden="true"></canvas>
+
+  <div class="scroll-progress-bar" id="scrollProgressBar" aria-hidden="true"></div>
+  <div class="custom-cursor" aria-hidden="true"></div>
+  <div class="custom-cursor-follower" aria-hidden="true"></div>
+
+  <!-- NAVBAR -->
+  <nav class="navbar-custom" id="mainNavbar">
+    <div class="navbar-container">
+      <a href="index.html" class="logo" id="nav-brand-logo" aria-label="Brand Logo">
+        <img class="logo-img" src="images/stackly-logo.webp" alt="Stackly Logo">
+      </a>
+      <ul class="nav-menu-list">
+        <li><a href="index.html" class="nav-link-item">Home</a></li>
+        <li><a href="properties.html" class="nav-link-item">Properties</a></li>
+        <li><a href="space-types.html" class="nav-link-item">Space Types</a></li>
+        <li><a href="about.html" class="nav-link-item">About Us</a></li>
+        <li><a href="contact.html" class="nav-link-item">Contact</a></li>
+      </ul>
+      <div class="nav-actions">
+        <a href="signin.html" class="btn-magnetic btn-secondary-glass btn-sm-custom">Sign In</a>
+        <a href="book-tour.html" class="btn-magnetic btn-primary-glow btn-sm-custom btn-shimmer">
+          <i class="bi bi-calendar-event me-1"></i> Book a Tour
+        </a>
+        <button class="navbar-toggle-btn" id="mobileToggleBtn" aria-label="Toggle Navigation"><i class="bi bi-list"></i></button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Mobile Drawer -->
+  <div class="mobile-nav-drawer" id="mobileNavDrawer" aria-hidden="true">
+    <div class="mobile-drawer-header">
+      <a href="index.html" class="logo">
+        <img class="logo-img" src="images/stackly-logo.webp" alt="Stackly Logo" style="height:36px;">
+      </a>
+      <button class="navbar-toggle-btn" id="closeDrawerBtn" aria-label="Close Menu"><i class="bi bi-x-lg"></i></button>
+    </div>
+    <ul class="mobile-nav-links">
+      <li><a href="index.html" class="mobile-nav-link">Home</a></li>
+      <li><a href="properties.html" class="mobile-nav-link">Properties</a></li>
+      <li><a href="space-types.html" class="mobile-nav-link">Space Types</a></li>
+      <li><a href="about.html" class="mobile-nav-link">About Us</a></li>
+      <li><a href="contact.html" class="mobile-nav-link">Contact</a></li>
+    </ul>
+  </div>
+
+  <!-- HERO BANNER -->
+  <section class="page-hero-banner" style="padding-top: calc(var(--nav-height) + 60px);">
+    <div class="container-custom">
+      <div class="section-badge"><span class="badge-dot"></span> Complimentary Day Pass Included</div>
+      <h1 class="section-title">Schedule Your Personalized VIP Tour</h1>
+      <p class="section-desc">
+        Experience our acoustic suites, test our 1Gbps redundant fiber speed, and enjoy specialty pour-over espresso on us.
+      </p>
+    </div>
+  </section>
+
+  <!-- TOUR BOOKING INTERACTIVE WIZARD -->
+  <section class="section-padding" style="padding-top:40px;">
+    <div class="container-custom" style="max-width:860px;">
+      <div class="glass-card p-4 p-md-5" data-animate="fade-in">
+        <form id="dedicatedTourForm">
+          <!-- Step 1: Location & Workspace -->
+          <h4 style="color:#ffffff; margin-bottom:16px; font-size:1.2rem;">
+            <span class="badge bg-primary text-white me-2">1</span> Choose Location & Workspace
+          </h4>
+          <div class="row g-3 mb-4">
+            <div class="col-md-6">
+              <label class="form-label" style="font-size:0.82rem; color:var(--text-muted); font-weight:600;">METRO CITY & CAMPUS</label>
+              <select class="form-select" style="background:#090f24; border:1px solid var(--glass-border); color:#ffffff; border-radius:var(--radius-sm); padding:12px 14px;">
+                <option value="blr-kora">Bangalore — The Hive (Koramangala 4th Block)</option>
+                <option value="blr-indi">Bangalore — The Glasshouse (Indiranagar)</option>
+                <option value="bom-bkc">Mumbai — Nexus Horizon (BKC)</option>
+                <option value="bom-lp">Mumbai — Apex Bay (Lower Parel)</option>
+                <option value="del-cyber">Delhi NCR — CyberOne (DLF Cyber City)</option>
+                <option value="hyd-hitec">Hyderabad — Silicon Matrix (Hitec City)</option>
+                <option value="pun-baner">Pune — SkyTech Altitude (Baner)</option>
+              </select>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label" style="font-size:0.82rem; color:var(--text-muted); font-weight:600;">WORKSPACE TYPE</label>
+              <select class="form-select" style="background:#090f24; border:1px solid var(--glass-border); color:#ffffff; border-radius:var(--radius-sm); padding:12px 14px;">
+                <option value="private">Private Office Suite (2-40 members)</option>
+                <option value="dedicated">Dedicated Desk</option>
+                <option value="hotdesk">Flexible Hot Desk</option>
+                <option value="custom">Enterprise Custom Floor (40+ members)</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Step 2: Date & Time -->
+          <h4 style="color:#ffffff; margin-bottom:16px; font-size:1.2rem;">
+            <span class="badge bg-primary text-white me-2">2</span> Select Preferred Date & Slot
+          </h4>
+          <div class="row g-3 mb-4">
+            <div class="col-md-5">
+              <label class="form-label" style="font-size:0.82rem; color:var(--text-muted); font-weight:600;">DATE</label>
+              <input type="date" class="form-control" required style="background:#090f24; border:1px solid var(--glass-border); color:#ffffff; border-radius:var(--radius-sm); padding:11px 14px;">
+            </div>
+            <div class="col-md-7">
+              <label class="form-label" style="font-size:0.82rem; color:var(--text-muted); font-weight:600;">TIME SLOT (30 MIN WALKTHROUGH)</label>
+              <div class="d-grid" style="grid-template-columns: repeat(3, 1fr); gap: 8px;" id="timeSlotPills">
+                <div class="time-slot-pill active">10:00 AM</div>
+                <div class="time-slot-pill">11:30 AM</div>
+                <div class="time-slot-pill">02:00 PM</div>
+                <div class="time-slot-pill">03:30 PM</div>
+                <div class="time-slot-pill">05:00 PM</div>
+                <div class="time-slot-pill">06:30 PM</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Step 3: Contact Details -->
+          <h4 style="color:#ffffff; margin-bottom:16px; font-size:1.2rem;">
+            <span class="badge bg-primary text-white me-2">3</span> Your Contact Information
+          </h4>
+          <div class="row g-3 mb-4">
+            <div class="col-md-6">
+              <label class="form-label" style="font-size:0.82rem; color:var(--text-muted); font-weight:600;">FULL NAME</label>
+              <input type="text" class="form-control" placeholder="Aditya Roy" required style="background:rgba(255,255,255,0.04); border:1px solid var(--glass-border); color:#ffffff; border-radius:var(--radius-sm); padding:11px 14px;">
+            </div>
+            <div class="col-md-6">
+              <label class="form-label" style="font-size:0.82rem; color:var(--text-muted); font-weight:600;">WORK EMAIL</label>
+              <input type="email" class="form-control" placeholder="aditya@venture.com" required style="background:rgba(255,255,255,0.04); border:1px solid var(--glass-border); color:#ffffff; border-radius:var(--radius-sm); padding:11px 14px;">
+            </div>
+            <div class="col-md-6">
+              <label class="form-label" style="font-size:0.82rem; color:var(--text-muted); font-weight:600;">PHONE NUMBER (FOR DIGITAL GATE PASS)</label>
+              <input type="tel" class="form-control" placeholder="+91 98765 12345" required style="background:rgba(255,255,255,0.04); border:1px solid var(--glass-border); color:#ffffff; border-radius:var(--radius-sm); padding:11px 14px;">
+            </div>
+            <div class="col-md-6">
+              <label class="form-label" style="font-size:0.82rem; color:var(--text-muted); font-weight:600;">TEAM SIZE</label>
+              <input type="number" class="form-control" placeholder="e.g. 8" min="1" max="200" style="background:rgba(255,255,255,0.04); border:1px solid var(--glass-border); color:#ffffff; border-radius:var(--radius-sm); padding:11px 14px;">
+            </div>
+          </div>
+
+          <button type="submit" class="btn-magnetic btn-primary-glow btn-lg-custom w-100 btn-shimmer">
+            <i class="bi bi-calendar2-check-fill me-2"></i> Confirm VIP Tour Reservation
+          </button>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+    <!-- ==================== FOOTER ==================== -->
+  <footer class="footer-master">
+    <div class="container-custom">
+      <div class="footer-grid-aligned">
+        <!-- Col 1: Brand & Bio -->
+        <div class="footer-col">
+          <a href="index.html" class="logo mb-3" style="display:inline-flex;">
+            <img class="logo-img" src="images/stackly-logo.webp" alt="WorkNest Stackly Logo">
+          </a>
+          <p class="footer-brand-desc">
+            Next-generation co-working spaces and enterprise office suites thoughtfully engineered for modern professionals, high-velocity creators, and ambitious teams.
+          </p>
+          <div class="footer-social-row">
+            <a href="404.html" class="social-circle-link" aria-label="LinkedIn" title="LinkedIn"><i class="bi bi-linkedin"></i></a>
+            <a href="404.html" class="social-circle-link" aria-label="Twitter / X" title="Twitter / X"><i class="bi bi-twitter-x"></i></a>
+            <a href="404.html" class="social-circle-link" aria-label="Instagram" title="Instagram"><i class="bi bi-instagram"></i></a>
+            <a href="404.html" class="social-circle-link" aria-label="GitHub" title="GitHub"><i class="bi bi-github"></i></a>
+          </div>
+        </div>
+
+        <!-- Col 2: Quick Links -->
+        <div class="footer-col">
+          <h4 class="footer-title">Quick Links</h4>
+          <ul class="footer-links-list">
+            <li><a href="index.html"><i class="bi bi-chevron-right"></i> Home</a></li>
+            <li><a href="properties.html"><i class="bi bi-chevron-right"></i> Properties</a></li>
+            <li><a href="space-types.html"><i class="bi bi-chevron-right"></i> Space Types</a></li>
+            <li><a href="about.html"><i class="bi bi-chevron-right"></i> About Us</a></li>
+            <li><a href="contact.html"><i class="bi bi-chevron-right"></i> Contact</a></li>
+          </ul>
+        </div>
+
+        <!-- Col 3: Top Metro Hubs (All Render to 404) -->
+        <div class="footer-col">
+          <h4 class="footer-title">Top Metro Hubs</h4>
+          <ul class="footer-links-list">
+            <li><a href="404.html"><i class="bi bi-geo-alt"></i> Bangalore (Koramangala, Indiranagar)</a></li>
+            <li><a href="404.html"><i class="bi bi-geo-alt"></i> Mumbai (BKC, Lower Parel)</a></li>
+            <li><a href="404.html"><i class="bi bi-geo-alt"></i> Delhi NCR (Cyber City, Noida)</a></li>
+            <li><a href="404.html"><i class="bi bi-geo-alt"></i> Hyderabad (Hitec City, Madhapur)</a></li>
+            <li><a href="404.html"><i class="bi bi-geo-alt"></i> Pune (Baner, Viman Nagar)</a></li>
+          </ul>
+        </div>
+
+        <!-- Col 4: Corporate Headquarters -->
+        <div class="footer-col">
+          <h4 class="footer-title">Corporate Headquarters</h4>
+          <div class="footer-contact-item">
+            <i class="bi bi-geo-alt-fill"></i>
+            <span>42 WorkNest Innovation Tower, 80ft Road, Koramangala 4th Block, Bangalore 560034</span>
+          </div>
+          <div class="footer-contact-item">
+            <i class="bi bi-envelope-fill"></i>
+            <a href="mailto:concierge@worknest.space" style="color: inherit; text-decoration: none;">concierge@worknest.space</a>
+          </div>
+          <div class="footer-contact-item">
+            <i class="bi bi-telephone-fill"></i>
+            <a href="tel:+918049208800" style="color: inherit; text-decoration: none;">+91 (080) 4920-8800 / +1 (800) 420-NEST</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Footer Bottom Copyright & Legal (All Legal Links Render to 404) -->
+      <div class="footer-bottom-bar">
+        <div>
+          &copy; 2026 WorkNest Global Workspaces Inc. All rights reserved.
+        </div>
+        <div class="footer-legal-links">
+          <a href="404.html">Privacy Policy</a>
+          <a href="404.html">Terms of Service</a>
+          <a href="404.html">Cookie Preferences</a>
+          <a href="404.html">Security & Compliance</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <button class="back-to-top-btn" id="backToTopBtn" aria-label="Back to top">
+    <svg class="back-to-top-svg" viewBox="0 0 52 52">
+      <circle class="back-to-top-circle" id="backToTopCircle" cx="26" cy="26" r="24"></circle>
+    </svg>
+    <i class="bi bi-arrow-up"></i>
+  </button>
+
+  <script src="js/main.js"></script>
+  <script>
+    const slots = document.querySelectorAll('#timeSlotPills .time-slot-pill');
+    slots.forEach(slot => {
+      slot.addEventListener('click', () => {
+        slots.forEach(s => s.classList.remove('active'));
+        slot.classList.add('active');
+      });
+    });
+
+    const form = document.getElementById('dedicatedTourForm');
+    if (form) {
+      form.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const submitBtn = form.querySelector('button[type="submit"]');
+        submitBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span> Generating VIP Pass...';
+        submitBtn.disabled = true;
+
+        setTimeout(() => {
+          form.innerHTML = `
+            <div class="text-center py-5">
+              <div style="width: 80px; height: 80px; border-radius: 50%; background: rgba(16, 185, 129, 0.2); color: var(--primary-light); display: inline-flex; align-items: center; justify-content: center; font-size: 2.6rem; margin-bottom: 20px;">
+                <i class="bi bi-check2-circle"></i>
+              </div>
+              <h3 style="color:#ffffff; margin-bottom: 12px;">VIP Tour Confirmed!</h3>
+              <p style="color:var(--text-secondary); max-width: 500px; margin: 0 auto 24px auto;">
+                We have registered your visit. Your digital gate pass, parking QR code, and complimentary 1-day pass details have been sent to your email and phone.
+              </p>
+              <a href="index.html" class="btn-magnetic btn-primary-glow btn-sm-custom">Return to Homepage</a>
+            </div>
+          `;
+        }, 1200);
+      });
+    }
+  </script>
+</body>
+</html>

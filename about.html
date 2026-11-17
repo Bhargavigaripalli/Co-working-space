@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="About WorkNest — Redefining workspaces for modern creators, scaleups, and global enterprise innovators.">
+  <title>About Us | WorkNest Premium Workspaces</title>
+  <link rel="icon" href="favicon.ico" type="image/x-icon">
+
+  <!-- Fonts & Icons -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Outfit:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" rel="stylesheet">
+
+  <link rel="stylesheet" href="css/global.css">
+  <link rel="stylesheet" href="css/index.css">
+  <style>
+    /* Timeline styles */
+    .timeline-track {
+      position: relative;
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 40px 0;
+    }
+    .timeline-track::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 2px;
+      background: linear-gradient(180deg, var(--primary) 0%, var(--accent) 100%);
+    }
+    .timeline-item {
+      position: relative;
+      margin-bottom: 50px;
+      width: 50%;
+    }
+    .timeline-item.left {
+      left: 0;
+      padding-right: 40px;
+      text-align: right;
+    }
+    .timeline-item.right {
+      left: 50%;
+      padding-left: 40px;
+      text-align: left;
+    }
+    .timeline-dot {
+      position: absolute;
+      top: 15px;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: var(--bg-deep);
+      border: 4px solid var(--primary);
+      box-shadow: 0 0 15px var(--primary);
+      z-index: 2;
+    }
+    .timeline-item.left .timeline-dot { right: -10px; }
+    .timeline-item.right .timeline-dot { left: -10px; }
+
+    @media (max-width: 768px) {
+      .timeline-track::before { left: 20px; }
+      .timeline-item { width: 100%; left: 0 !important; padding-left: 50px !important; padding-right: 0 !important; text-align: left !important; }
+      .timeline-dot { left: 10px !important; }
+    }
+
+    /* Team Cards */
+    .team-avatar-img {
+      width: 100%;
+      aspect-ratio: 1 / 1;
+      object-fit: cover;
+      border-radius: var(--radius-lg);
+      margin-bottom: 20px;
+      transition: transform 0.6s ease;
+    }
+    .team-card:hover .team-avatar-img {
+      transform: scale(1.04);
+    }
+
+    /* ==========================================================================
+       MISSION & STATS SECTION (2-COLUMN RESPONSIVE GRID)
+       ========================================================================== */
+    .mission-section-grid {
+      display: grid;
+      grid-template-columns: 1.15fr 1fr;
+      gap: 56px;
+      align-items: center;
+    }
+
+    .mission-heading {
+      font-size: clamp(2rem, 3.8vw, 2.85rem);
+      font-weight: 800;
+      color: #ffffff;
+      line-height: 1.22;
+      letter-spacing: -0.03em;
+      margin-top: 14px;
+      margin-bottom: 22px;
+    }
+
+    .mission-lead-text {
+      color: var(--text-secondary);
+      font-size: 1.08rem;
+      line-height: 1.8;
+      margin-bottom: 18px;
+    }
+
+    .mission-body-text {
+      color: var(--text-muted);
+      font-size: 0.96rem;
+      line-height: 1.75;
+      margin-bottom: 28px;
+    }
+
+    .mission-features-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .mission-feature-item {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 0.94rem;
+      color: var(--text-primary);
+      font-weight: 500;
+    }
+
+    .mission-feature-icon {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: rgba(16, 185, 129, 0.15);
+      border: 1px solid rgba(16, 185, 129, 0.3);
+      color: var(--primary-light);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.85rem;
+      flex-shrink: 0;
+    }
+
+    .mission-stats-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 22px;
+    }
+
+    .stat-metric-card {
+      padding: 34px 22px;
+      border-radius: var(--radius-xl);
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background: var(--bg-card);
+      border: 1px solid var(--glass-border);
+      position: relative;
+      overflow: hidden;
+      transition: transform var(--transition-normal), border-color var(--transition-normal), box-shadow var(--transition-normal);
+    }
+
+    .stat-metric-card:hover {
+      transform: translateY(-6px);
+      border-color: rgba(var(--primary-rgb), 0.4);
+      box-shadow: 0 20px 45px rgba(0, 0, 0, 0.6), 0 0 30px rgba(var(--primary-rgb), 0.15);
+    }
+
+    .stat-card-icon-pill {
+      width: 48px;
+      height: 48px;
+      border-radius: var(--radius-md);
+      background: rgba(16, 185, 129, 0.1);
+      border: 1px solid rgba(16, 185, 129, 0.25);
+      color: var(--primary-light);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.35rem;
+      margin-bottom: 16px;
+      box-shadow: 0 0 15px rgba(16, 185, 129, 0.15);
+    }
+
+    .stat-number-wrap {
+      font-family: var(--font-heading);
+      font-size: clamp(2.3rem, 4vw, 3rem);
+      font-weight: 800;
+      line-height: 1;
+      letter-spacing: -0.03em;
+      margin-bottom: 10px;
+      background: linear-gradient(135deg, #ffffff 15%, var(--primary-light) 65%, var(--accent-light) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      display: inline-flex;
+      align-items: baseline;
+      justify-content: center;
+    }
+
+    .stat-suffix {
+      font-size: 0.75em;
+      margin-left: 2px;
+      background: inherit;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .stat-metric-label {
+      font-size: 0.82rem;
+      font-weight: 700;
+      color: var(--text-muted);
+      letter-spacing: 1.2px;
+      text-transform: uppercase;
+    }
+
+    .team-card {
+      padding: 32px 24px;
+      text-align: center;
+    }
+
+    @media (max-width: 991px) {
+      .mission-section-grid {
+        grid-template-columns: 1fr;
+        gap: 45px;
+      }
+    }
+
+    @media (max-width: 540px) {
+      .mission-stats-grid {
+        grid-template-columns: 1fr;
+        gap: 16px;
+      }
+      .stat-metric-card {
+        padding: 28px 18px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="ambient-glow-wrapper" aria-hidden="true">
+    <div class="ambient-orb ambient-orb-1"></div>
+    <div class="ambient-orb ambient-orb-2"></div>
+  </div>
+  <canvas id="particleCanvas" aria-hidden="true"></canvas>
+
+  <div class="scroll-progress-bar" id="scrollProgressBar" aria-hidden="true"></div>
+  <div class="custom-cursor" aria-hidden="true"></div>
+  <div class="custom-cursor-follower" aria-hidden="true"></div>
+
+  <!-- NAVBAR -->
+  <nav class="navbar-custom" id="mainNavbar">
+    <div class="navbar-container">
+      <a href="index.html" class="logo" id="nav-brand-logo" aria-label="Brand Logo">
+        <img class="logo-img" src="images/stackly-logo.webp" alt="Stackly Logo">
+      </a>
+      <ul class="nav-menu-list">
+        <li><a href="index.html" class="nav-link-item">Home</a></li>
+        <li><a href="properties.html" class="nav-link-item">Properties</a></li>
+        <li><a href="space-types.html" class="nav-link-item">Space Types</a></li>
+        <li><a href="about.html" class="nav-link-item active">About Us</a></li>
+        <li><a href="contact.html" class="nav-link-item">Contact</a></li>
+      </ul>
+      <div class="nav-actions">
+        <a href="login.html" class="btn-magnetic btn-outline-glow btn-sm-custom nav-btn-login">Login</a>
+        <a href="get-started.html" class="btn-magnetic btn-primary-glow btn-sm-custom btn-shimmer nav-btn-getstarted"><span>Get Started</span></a>
+        <button class="navbar-toggle-btn" id="mobileToggleBtn" aria-label="Toggle Navigation">
+          <i class="bi bi-list"></i>
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Mobile Drawer -->
+  <div class="mobile-nav-drawer" id="mobileNavDrawer" aria-hidden="true">
+    <div class="mobile-drawer-header">
+      <a href="index.html" class="logo">
+        <img class="logo-img" src="images/stackly-logo.webp" alt="Stackly Logo" style="height:36px;">
+      </a>
+      <button class="navbar-toggle-btn" id="closeDrawerBtn" aria-label="Close Menu"><i class="bi bi-x-lg"></i></button>
+    </div>
+    <ul class="mobile-nav-links">
+      <li><a href="index.html" class="mobile-nav-link">Home <i class="bi bi-chevron-right"></i></a></li>
+      <li><a href="properties.html" class="mobile-nav-link">Properties <i class="bi bi-chevron-right"></i></a></li>
+      <li><a href="space-types.html" class="mobile-nav-link">Space Types <i class="bi bi-chevron-right"></i></a></li>
+      <li><a href="about.html" class="mobile-nav-link active">About Us <i class="bi bi-chevron-right"></i></a></li>
+      <li><a href="contact.html" class="mobile-nav-link">Contact <i class="bi bi-chevron-right"></i></a></li>
+    </ul>
+    <div class="mobile-drawer-actions" style="padding: 20px 24px; display: flex; flex-direction: column; gap: 12px; margin-top: auto; border-top: 1px solid rgba(255, 255, 255, 0.08);">
+      <a href="login.html" class="btn-magnetic btn-outline-glow w-100 justify-content-center">Login</a>
+      <a href="get-started.html" class="btn-magnetic btn-primary-glow btn-shimmer w-100 justify-content-center"><span>Get Started</span></a>
+    </div></div>
+
+  <!-- HERO BANNER -->
+  <section class="page-hero-banner" style="padding-top: calc(var(--nav-height) + 60px);">
+    <div class="container-custom">
+      <div class="section-badge"><span class="badge-dot"></span> Our Purpose & Story</div>
+      <h1 class="section-title">Architecting Spaces Where Ideas Thrive</h1>
+      <p class="section-desc">
+        Founded on the premise that physical workspaces should elevate human ingenuity rather than constrain it, WorkNest delivers high-focus environments across India and beyond.
+      </p>
+    </div>
+  </section>
+
+  <!-- MISSION & STATS -->
+  <section class="section-padding">
+    <div class="container-custom">
+      <div class="mission-section-grid" data-animate="fade-in">
+        
+        <!-- Left: Mission Statement & Narrative -->
+        <div class="mission-text-column">
+          <div class="section-badge"><span class="badge-dot"></span> Mission Statement</div>
+          <h2 class="mission-heading">
+            Empowering <span class="gradient-text">1,000,000</span> Innovators by 2030
+          </h2>
+          <p class="mission-lead-text">
+            We believe traditional leases are broken, restrictive, and slow down ambitious companies. WorkNest was built from the ground up to offer friction-free workspaces that scale seamlessly as your team grows.
+          </p>
+          <p class="mission-body-text">
+            From acoustic glass dampening to redundant carrier-neutral fiber optics, every square foot is intentionally engineered so your engineers, designers, and executives can do their finest work.
+          </p>
+          
+          <div class="mission-features-list">
+            <div class="mission-feature-item">
+              <div class="mission-feature-icon"><i class="bi bi-shield-check"></i></div>
+              <span>Carrier-Neutral Redundant 1Gbps Fiber Mesh</span>
+            </div>
+            <div class="mission-feature-item">
+              <div class="mission-feature-icon"><i class="bi bi-soundwave"></i></div>
+              <span>Bio-Acoustic 40dB Quiet Workstation Isolation</span>
+            </div>
+            <div class="mission-feature-item">
+              <div class="mission-feature-icon"><i class="bi bi-check-circle-fill"></i></div>
+              <span>Flexible Leases from 1 Month with 100% Transparency</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right: 2x2 Metric Cards Grid -->
+        <div class="mission-stats-grid">
+          
+          <!-- Stat 1 -->
+          <div class="glass-card stat-metric-card">
+            <div class="stat-card-icon-pill">
+              <i class="bi bi-buildings-fill"></i>
+            </div>
+            <div class="stat-number-wrap">
+              <span class="counter-value" data-count="550">0</span><span class="stat-suffix">+</span>
+            </div>
+            <span class="stat-metric-label">Active Properties</span>
+          </div>
+
+          <!-- Stat 2 -->
+          <div class="glass-card stat-metric-card">
+            <div class="stat-card-icon-pill">
+              <i class="bi bi-geo-alt-fill"></i>
+            </div>
+            <div class="stat-number-wrap">
+              <span class="counter-value" data-count="48">0</span><span class="stat-suffix">+</span>
+            </div>
+            <span class="stat-metric-label">Metro Hubs</span>
+          </div>
+
+          <!-- Stat 3 -->
+          <div class="glass-card stat-metric-card">
+            <div class="stat-card-icon-pill">
+              <i class="bi bi-people-fill"></i>
+            </div>
+            <div class="stat-number-wrap">
+              <span class="counter-value" data-count="150">0</span><span class="stat-suffix">K+</span>
+            </div>
+            <span class="stat-metric-label">Global Members</span>
+          </div>
+
+          <!-- Stat 4 -->
+          <div class="glass-card stat-metric-card">
+            <div class="stat-card-icon-pill">
+              <i class="bi bi-lightning-charge-fill"></i>
+            </div>
+            <div class="stat-number-wrap">
+              <span class="counter-value" data-count="100">0</span><span class="stat-suffix">%</span>
+            </div>
+            <span class="stat-metric-label">Renewable Power</span>
+          </div>
+
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- GROWTH TIMELINE -->
+  <section class="section-padding" style="background: rgba(5,9,23,0.5);">
+    <div class="container-custom">
+      <div class="section-header">
+        <div class="section-badge"><span class="badge-dot"></span> The Journey</div>
+        <h2 class="section-title">From One Floor to 48 Metro Cities</h2>
+        <p class="section-desc">Key milestones that transformed WorkNest into a leading workspace platform.</p>
+      </div>
+
+      <div class="timeline-track">
+        <!-- 2020 -->
+        <div class="timeline-item left">
+          <div class="timeline-dot"></div>
+          <div class="glass-card p-4">
+            <span style="color:var(--primary-light); font-weight:700; font-size:0.85rem;">2020 • THE GENESIS</span>
+            <h4 style="color:#ffffff; margin: 6px 0;">First Campus in Koramangala</h4>
+            <p style="color:var(--text-muted); font-size:0.88rem; margin:0;">Launched our flagship 15,000 sq.ft facility with a focus on deep acoustic silence and craft coffee.</p>
+          </div>
+        </div>
+
+        <!-- 2022 -->
+        <div class="timeline-item right">
+          <div class="timeline-dot"></div>
+          <div class="glass-card p-4">
+            <span style="color:var(--primary-light); font-weight:700; font-size:0.85rem;">2022 • MULTI-CITY EXPANSION</span>
+            <h4 style="color:#ffffff; margin: 6px 0;">Entering Mumbai & Delhi NCR</h4>
+            <p style="color:var(--text-muted); font-size:0.88rem; margin:0;">Expanded to BKC Mumbai and DLF Cyber City, introducing private custom floors for high-growth unicorns.</p>
+          </div>
+        </div>
+
+        <!-- 2024 -->
+        <div class="timeline-item left">
+          <div class="timeline-dot"></div>
+          <div class="glass-card p-4">
+            <span style="color:var(--primary-light); font-weight:700; font-size:0.85rem;">2024 • THE GLOBAL PASSPORT</span>
+            <h4 style="color:#ffffff; margin: 6px 0;">One Pass, 30 Cities</h4>
+            <p style="color:var(--text-muted); font-size:0.88rem; margin:0;">Launched WorkNest Global Passport allowing members to seamlessly tap into any hub across India.</p>
+          </div>
+        </div>
+
+        <!-- 2026 -->
+        <div class="timeline-item right">
+          <div class="timeline-dot"></div>
+          <div class="glass-card p-4">
+            <span style="color:var(--primary-light); font-weight:700; font-size:0.85rem;">2026 • AI-POWERED HUBS</span>
+            <h4 style="color:#ffffff; margin: 6px 0;">Next-Gen WorkNest 5.0</h4>
+            <p style="color:var(--text-muted); font-size:0.88rem; margin:0;">Over 550+ verified campuses, zero-carbon footprint certifications, and smart automated environmental controls.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- LEADERSHIP TEAM -->
+  <section class="section-padding">
+    <div class="container-custom">
+      <div class="section-header">
+        <div class="section-badge"><span class="badge-dot"></span> The Architects</div>
+        <h2 class="section-title">Leadership Behind WorkNest</h2>
+        <p class="section-desc">Passionate real estate innovators, architects, and technologists.</p>
+      </div>
+
+      <div class="card-equal-grid">
+        <!-- Leader 1 -->
+        <div class="glass-card p-4 team-card text-center">
+          <img src="images/avatar-marcus.webp" alt="Vikram Malhotra" class="team-avatar-img">
+          <h4 style="color:#ffffff; margin-bottom:4px;">Vikram Malhotra</h4>
+          <span style="color:var(--primary-light); font-size:0.85rem; font-weight:600;">Co-Founder & CEO</span>
+          <p style="color:var(--text-muted); font-size:0.88rem; margin-top:12px;">Former architecture director with 15+ years experience designing Grade-A commercial headquarters.</p>
+        </div>
+
+        <!-- Leader 2 -->
+        <div class="glass-card p-4 team-card text-center">
+          <img src="images/avatar-elena.webp" alt="Dr. Nandita Rao" class="team-avatar-img">
+          <h4 style="color:#ffffff; margin-bottom:4px;">Dr. Nandita Rao</h4>
+          <span style="color:var(--primary-light); font-size:0.85rem; font-weight:600;">Head of Acoustic & Spatial Design</span>
+          <p style="color:var(--text-muted); font-size:0.88rem; margin-top:12px;">Pioneered bio-acoustic sound dampening and human-centric workplace wellness protocols.</p>
+        </div>
+
+        <!-- Leader 3 -->
+        <div class="glass-card p-4 team-card text-center">
+          <img src="images/avatar-david.webp" alt="Arjun Singhal" class="team-avatar-img">
+          <h4 style="color:#ffffff; margin-bottom:4px;">Arjun Singhal</h4>
+          <span style="color:var(--primary-light); font-size:0.85rem; font-weight:600;">Chief Technology Officer</span>
+          <p style="color:var(--text-muted); font-size:0.88rem; margin-top:12px;">Oversees 1Gbps enterprise network infrastructure, keyless biometrics, and member experience platforms.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+    <!-- ==================== FOOTER ==================== -->
+  <footer class="footer-master">
+    <div class="container-custom">
+      <div class="footer-grid-aligned">
+        <!-- Col 1: Brand & Bio -->
+        <div class="footer-col">
+          <a href="index.html" class="logo mb-3" style="display:inline-flex;">
+            <img class="logo-img" src="images/stackly-logo.webp" alt="WorkNest Stackly Logo">
+          </a>
+          <p class="footer-brand-desc">
+            Next-generation co-working spaces and enterprise office suites thoughtfully engineered for modern professionals, high-velocity creators, and ambitious teams.
+          </p>
+          <div class="footer-social-row">
+            <a href="404.html" class="social-circle-link" aria-label="LinkedIn" title="LinkedIn"><i class="bi bi-linkedin"></i></a>
+            <a href="404.html" class="social-circle-link" aria-label="Twitter / X" title="Twitter / X"><i class="bi bi-twitter-x"></i></a>
+            <a href="404.html" class="social-circle-link" aria-label="Instagram" title="Instagram"><i class="bi bi-instagram"></i></a>
+            <a href="404.html" class="social-circle-link" aria-label="GitHub" title="GitHub"><i class="bi bi-github"></i></a>
+          </div>
+        </div>
+
+        <!-- Col 2: Quick Links -->
+        <div class="footer-col">
+          <h4 class="footer-title">Quick Links</h4>
+          <ul class="footer-links-list">
+            <li><a href="index.html"><i class="bi bi-chevron-right"></i> Home</a></li>
+            <li><a href="properties.html"><i class="bi bi-chevron-right"></i> Properties</a></li>
+            <li><a href="space-types.html"><i class="bi bi-chevron-right"></i> Space Types</a></li>
+            <li><a href="about.html"><i class="bi bi-chevron-right"></i> About Us</a></li>
+            <li><a href="contact.html"><i class="bi bi-chevron-right"></i> Contact</a></li>
+          </ul>
+        </div>
+
+        <!-- Col 3: Top Metro Hubs (All Render to 404) -->
+        <div class="footer-col">
+          <h4 class="footer-title">Top Metro Hubs</h4>
+          <ul class="footer-links-list">
+            <li><a href="404.html"><i class="bi bi-geo-alt"></i> Bangalore (Koramangala, Indiranagar)</a></li>
+            <li><a href="404.html"><i class="bi bi-geo-alt"></i> Mumbai (BKC, Lower Parel)</a></li>
+            <li><a href="404.html"><i class="bi bi-geo-alt"></i> Delhi NCR (Cyber City, Noida)</a></li>
+            <li><a href="404.html"><i class="bi bi-geo-alt"></i> Hyderabad (Hitec City, Madhapur)</a></li>
+            <li><a href="404.html"><i class="bi bi-geo-alt"></i> Pune (Baner, Viman Nagar)</a></li>
+          </ul>
+        </div>
+
+        <!-- Col 4: Corporate Headquarters -->
+        <div class="footer-col">
+          <h4 class="footer-title">Corporate Headquarters</h4>
+          <div class="footer-contact-item">
+            <i class="bi bi-geo-alt-fill"></i>
+            <span>42 WorkNest Innovation Tower, 80ft Road, Koramangala 4th Block, Bangalore 560034</span>
+          </div>
+          <div class="footer-contact-item">
+            <i class="bi bi-envelope-fill"></i>
+            <a href="mailto:concierge@worknest.space" style="color: inherit; text-decoration: none;">concierge@worknest.space</a>
+          </div>
+          <div class="footer-contact-item">
+            <i class="bi bi-telephone-fill"></i>
+            <a href="tel:+918049208800" style="color: inherit; text-decoration: none;">+91 (080) 4920-8800 / +1 (800) 420-NEST</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Footer Bottom Copyright & Legal (All Legal Links Render to 404) -->
+      <div class="footer-bottom-bar">
+        <div>
+          &copy; 2026 WorkNest Global Workspaces Inc. All rights reserved.
+        </div>
+        <div class="footer-legal-links">
+          <a href="404.html">Privacy Policy</a>
+          <a href="404.html">Terms of Service</a>
+          <a href="404.html">Cookie Preferences</a>
+          <a href="404.html">Security & Compliance</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Modal -->
+  <div class="custom-modal-backdrop" id="tourModal" role="dialog" aria-modal="true">
+    <div class="custom-modal-dialog">
+      <div class="modal-header-custom">
+        <h3 style="font-size:1.3rem; margin:0; color:#ffffff;">Book a Workspace Tour</h3>
+        <button class="modal-close-btn modal-close-trigger"><i class="bi bi-x-lg"></i></button>
+      </div>
+      <div class="modal-body-custom">
+        <form id="tourBookingForm">
+          <div class="mb-3">
+            <label class="form-label" style="font-size:0.85rem; color:var(--text-muted); font-weight:600;">FULL NAME</label>
+            <input type="text" class="form-control" placeholder="Rohan Mehra" required style="background:rgba(255,255,255,0.05); border:1px solid var(--glass-border); color:#ffffff; border-radius:var(--radius-sm); padding:10px 14px;">
+          </div>
+          <div class="mb-3">
+            <label class="form-label" style="font-size:0.85rem; color:var(--text-muted); font-weight:600;">WORK EMAIL</label>
+            <input type="email" class="form-control" placeholder="rohan@tech.com" required style="background:rgba(255,255,255,0.05); border:1px solid var(--glass-border); color:#ffffff; border-radius:var(--radius-sm); padding:10px 14px;">
+          </div>
+          <button type="submit" class="btn-magnetic btn-primary-glow w-100 btn-shimmer" style="padding:14px;">
+            Confirm Tour
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <button class="back-to-top-btn" id="backToTopBtn" aria-label="Back to top">
+    <svg class="back-to-top-svg" viewBox="0 0 52 52">
+      <circle class="back-to-top-circle" id="backToTopCircle" cx="26" cy="26" r="24"></circle>
+    </svg>
+    <i class="bi bi-arrow-up"></i>
+  </button>
+
+  <script src="js/main.js"></script>
+</body>
+</html>

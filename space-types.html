@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Explore WorkNest Workspace Types & Solutions — From Hot Desks to Private Enterprise Custom Floors.">
+  <title>Space Types & Feature Comparison | WorkNest</title>
+  <link rel="icon" href="favicon.ico" type="image/x-icon">
+
+  <!-- Fonts & Icons -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Outfit:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" rel="stylesheet">
+
+  <link rel="stylesheet" href="css/global.css">
+  <link rel="stylesheet" href="css/index.css">
+  <style>
+    /* Comparison Matrix Table Styles */
+    .matrix-table-card {
+      background: var(--bg-card);
+      border: 1px solid var(--glass-border);
+      border-radius: var(--radius-xl);
+      overflow-x: auto;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+    }
+    .matrix-table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 750px;
+    }
+    .matrix-table th, .matrix-table td {
+      padding: 20px 24px;
+      text-align: center;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+      font-size: 0.92rem;
+    }
+    .matrix-table th:first-child, .matrix-table td:first-child {
+      text-align: left;
+      font-weight: 600;
+      color: #ffffff;
+      width: 32%;
+    }
+    .matrix-table th {
+      background: rgba(255, 255, 255, 0.03);
+      font-family: var(--font-heading);
+      font-size: 1.05rem;
+      color: #ffffff;
+      font-weight: 700;
+    }
+    .matrix-table th.highlight-col {
+      background: rgba(var(--primary-rgb), 0.12);
+      border-top: 3px solid var(--primary);
+    }
+    .matrix-table td.highlight-col {
+      background: rgba(var(--primary-rgb), 0.05);
+    }
+    .feature-check {
+      color: var(--primary-light);
+      font-size: 1.25rem;
+    }
+    .feature-dash {
+      color: var(--text-dim);
+      font-size: 1.2rem;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="ambient-glow-wrapper" aria-hidden="true">
+    <div class="ambient-orb ambient-orb-1"></div>
+    <div class="ambient-orb ambient-orb-3"></div>
+  </div>
+  <canvas id="particleCanvas" aria-hidden="true"></canvas>
+
+  <div class="scroll-progress-bar" id="scrollProgressBar" aria-hidden="true"></div>
+  <div class="custom-cursor" aria-hidden="true"></div>
+  <div class="custom-cursor-follower" aria-hidden="true"></div>
+
+  <!-- NAVBAR -->
+  <nav class="navbar-custom" id="mainNavbar">
+    <div class="navbar-container">
+      <a href="index.html" class="logo" id="nav-brand-logo" aria-label="Brand Logo">
+        <img class="logo-img" src="images/stackly-logo.webp" alt="Stackly Logo">
+      </a>
+      <ul class="nav-menu-list">
+        <li><a href="index.html" class="nav-link-item">Home</a></li>
+        <li><a href="properties.html" class="nav-link-item">Properties</a></li>
+        <li><a href="space-types.html" class="nav-link-item active">Space Types</a></li>
+        <li><a href="about.html" class="nav-link-item">About Us</a></li>
+        <li><a href="contact.html" class="nav-link-item">Contact</a></li>
+      </ul>
+      <div class="nav-actions">
+        <a href="login.html" class="btn-magnetic btn-outline-glow btn-sm-custom nav-btn-login">Login</a>
+        <a href="get-started.html" class="btn-magnetic btn-primary-glow btn-sm-custom btn-shimmer nav-btn-getstarted"><span>Get Started</span></a>
+        <button class="navbar-toggle-btn" id="mobileToggleBtn" aria-label="Toggle Navigation">
+          <i class="bi bi-list"></i>
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Mobile Drawer -->
+  <div class="mobile-nav-drawer" id="mobileNavDrawer" aria-hidden="true">
+    <div class="mobile-drawer-header">
+      <a href="index.html" class="logo">
+        <img class="logo-img" src="images/stackly-logo.webp" alt="Stackly Logo" style="height:36px;">
+      </a>
+      <button class="navbar-toggle-btn" id="closeDrawerBtn" aria-label="Close Menu"><i class="bi bi-x-lg"></i></button>
+    </div>
+    <ul class="mobile-nav-links">
+      <li><a href="index.html" class="mobile-nav-link">Home <i class="bi bi-chevron-right"></i></a></li>
+      <li><a href="properties.html" class="mobile-nav-link">Properties <i class="bi bi-chevron-right"></i></a></li>
+      <li><a href="space-types.html" class="mobile-nav-link active">Space Types <i class="bi bi-chevron-right"></i></a></li>
+      <li><a href="about.html" class="mobile-nav-link">About Us <i class="bi bi-chevron-right"></i></a></li>
+      <li><a href="contact.html" class="mobile-nav-link">Contact <i class="bi bi-chevron-right"></i></a></li>
+    </ul>
+    <div class="mobile-drawer-actions" style="padding: 20px 24px; display: flex; flex-direction: column; gap: 12px; margin-top: auto; border-top: 1px solid rgba(255, 255, 255, 0.08);">
+      <a href="login.html" class="btn-magnetic btn-outline-glow w-100 justify-content-center">Login</a>
+      <a href="get-started.html" class="btn-magnetic btn-primary-glow btn-shimmer w-100 justify-content-center"><span>Get Started</span></a>
+    </div></div>
+
+  <!-- HERO BANNER -->
+  <section class="page-hero-banner" style="padding-top: calc(var(--nav-height) + 60px);">
+    <div class="container-custom">
+      <div class="section-badge"><span class="badge-dot"></span> Architectural Versatility</div>
+      <h1 class="section-title">Workspace Solutions for Any Team Size</h1>
+      <p class="section-desc">
+        Explore flexible workstations, fully private soundproof suites, and bespoke custom enterprise buildouts engineered with enterprise security and comfort.
+      </p>
+    </div>
+  </section>
+
+  <!-- 6 MAIN TIERS (EQUAL HEIGHT GRID) -->
+  <section class="section-padding">
+    <div class="container-custom">
+      <div class="card-equal-grid">
+
+        <!-- Tier 1 -->
+        <div class="space-card-item glass-card">
+          <div class="space-card-icon-box"><i class="fa-solid fa-laptop"></i></div>
+          <h3 class="space-card-title">Flexible Hot Desk</h3>
+          <p class="space-card-desc">
+            Access inspiring open lounges, cafe commons, and acoustic booths whenever you want. Ideal for solo consultants, remote workers, and traveling founders.
+          </p>
+          <ul class="space-features-list">
+            <li><i class="bi bi-check-circle-fill"></i> Symmetrical 1 Gbps WiFi 6E</li>
+            <li><i class="bi bi-check-circle-fill"></i> Unlimited Specialty Tea & Espresso</li>
+            <li><i class="bi bi-check-circle-fill"></i> Access to Community Events</li>
+          </ul>
+          <div class="space-card-price-row">
+            <div class="space-card-price">$199 <small>/month</small></div>
+            <a href="404.html" class="btn-magnetic btn-primary-glow btn-sm-custom">Select</a>
+          </div>
+        </div>
+
+        <!-- Tier 2 -->
+        <div class="space-card-item glass-card">
+          <div class="space-card-icon-box"><i class="fa-solid fa-desktop"></i></div>
+          <h3 class="space-card-title">Dedicated Desk</h3>
+          <p class="space-card-desc">
+            Your own reserved desk with lockable storage drawer and dual monitor mounts. Leave your monitors and setup in place every day with total confidence.
+          </p>
+          <ul class="space-features-list">
+            <li><i class="bi bi-check-circle-fill"></i> Ergonomic Herman Miller Chair</li>
+            <li><i class="bi bi-check-circle-fill"></i> 5 Hours/mo Free Boardroom Credits</li>
+            <li><i class="bi bi-check-circle-fill"></i> 24/7 Smart Biometric Access</li>
+          </ul>
+          <div class="space-card-price-row">
+            <div class="space-card-price">$349 <small>/month</small></div>
+            <a href="404.html" class="btn-magnetic btn-primary-glow btn-sm-custom">Select</a>
+          </div>
+        </div>
+
+        <!-- Tier 3 -->
+        <div class="space-card-item glass-card" style="border-color: rgba(var(--primary-rgb), 0.4);">
+          <div class="space-card-icon-box" style="background:var(--primary); color:#ffffff;"><i class="fa-solid fa-building-shield"></i></div>
+          <h3 class="space-card-title">Private Office Suite</h3>
+          <p class="space-card-desc">
+            Turnkey lockable glass and acoustic suites for teams of 2 to 40. Branded signage, enterprise firewall VLAN, and executive daily cleaning included.
+          </p>
+          <ul class="space-features-list">
+            <li><i class="bi bi-check-circle-fill"></i> Acoustic 40dB Sound Attenuation</li>
+            <li><i class="bi bi-check-circle-fill"></i> 10 Hours/mo Free Boardroom Credits</li>
+            <li><i class="bi bi-check-circle-fill"></i> Dedicated Static IP & Private Subnet</li>
+          </ul>
+          <div class="space-card-price-row">
+            <div class="space-card-price">$599 <small>/desk/mo</small></div>
+            <a href="404.html" class="btn-magnetic btn-primary-glow btn-sm-custom">Select</a>
+          </div>
+        </div>
+
+        <!-- Tier 4 -->
+        <div class="space-card-item glass-card">
+          <div class="space-card-icon-box"><i class="fa-solid fa-people-roof"></i></div>
+          <h3 class="space-card-title">Enterprise Custom Floor</h3>
+          <p class="space-card-desc">
+            Entire dedicated wings or floors designed to your company's exact brand standards, IT security policies, executive suites, and private reception.
+          </p>
+          <ul class="space-features-list">
+            <li><i class="bi bi-check-circle-fill"></i> Custom Floorplan & Architecture</li>
+            <li><i class="bi bi-check-circle-fill"></i> Dedicated Server Closets & UPS</li>
+            <li><i class="bi bi-check-circle-fill"></i> Private Pantries & Restrooms</li>
+          </ul>
+          <div class="space-card-price-row">
+            <div class="space-card-price">Custom <small>Inquire</small></div>
+            <a href="404.html" class="btn-magnetic btn-primary-glow btn-sm-custom">Inquire</a>
+          </div>
+        </div>
+
+        <!-- Tier 5 -->
+        <div class="space-card-item glass-card">
+          <div class="space-card-icon-box"><i class="fa-solid fa-handshake"></i></div>
+          <h3 class="space-card-title">Boardrooms & Event Arena</h3>
+          <p class="space-card-desc">
+            High-spec 4K video conference rooms, pitch theaters, and a 100-person amphitheater with theater lighting and full livestreaming equipment.
+          </p>
+          <ul class="space-features-list">
+            <li><i class="bi bi-check-circle-fill"></i> Polycom 4K Tracking Cameras</li>
+            <li><i class="bi bi-check-circle-fill"></i> Wireless ClickShare Screen Casting</li>
+            <li><i class="bi bi-check-circle-fill"></i> Catering & Reception Setup</li>
+          </ul>
+          <div class="space-card-price-row">
+            <div class="space-card-price">$45 <small>/hour</small></div>
+            <a href="404.html" class="btn-magnetic btn-primary-glow btn-sm-custom">Book Room</a>
+          </div>
+        </div>
+
+        <!-- Tier 6 -->
+        <div class="space-card-item glass-card">
+          <div class="space-card-icon-box"><i class="fa-solid fa-globe"></i></div>
+          <h3 class="space-card-title">Virtual Office & Mail</h3>
+          <p class="space-card-desc">
+            Register your company at a prime commercial business address. Digital mail scanning, reception answering, and monthly lounge access included.
+          </p>
+          <ul class="space-features-list">
+            <li><i class="bi bi-check-circle-fill"></i> Commercial Registration Address</li>
+            <li><i class="bi bi-check-circle-fill"></i> Digital Mail Scanning to Email</li>
+            <li><i class="bi bi-check-circle-fill"></i> 2 Free Day Passes Monthly</li>
+          </ul>
+          <div class="space-card-price-row">
+            <div class="space-card-price">$99 <small>/month</small></div>
+            <a href="404.html" class="btn-magnetic btn-primary-glow btn-sm-custom">Activate</a>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== SIDE-BY-SIDE FEATURE COMPARISON MATRIX ==================== -->
+  <section class="section-padding" style="padding-top:0;">
+    <div class="container-custom">
+      <div class="section-header">
+        <div class="section-badge"><span class="badge-dot"></span> Complete Transparency</div>
+        <h2 class="section-title">Side-by-Side Feature Comparison</h2>
+        <p class="section-desc">Compare every inclusion across our tiers to select the optimal setup for your team.</p>
+      </div>
+
+      <div class="matrix-table-card">
+        <table class="matrix-table">
+          <thead>
+            <tr>
+              <th>Features & Inclusions</th>
+              <th>Hot Desk</th>
+              <th>Dedicated Desk</th>
+              <th class="highlight-col">Private Suite</th>
+              <th>Enterprise Floor</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>24/7 Access 365 Days</td>
+              <td><span class="feature-dash">—</span></td>
+              <td><span class="feature-check"><i class="bi bi-check-circle-fill"></i></span></td>
+              <td class="highlight-col"><span class="feature-check"><i class="bi bi-check-circle-fill"></i></span></td>
+              <td><span class="feature-check"><i class="bi bi-check-circle-fill"></i></span></td>
+            </tr>
+            <tr>
+              <td>High-Speed Fiber WiFi 6E</td>
+              <td><span class="feature-check"><i class="bi bi-check-circle-fill"></i></span></td>
+              <td><span class="feature-check"><i class="bi bi-check-circle-fill"></i></span></td>
+              <td class="highlight-col"><span class="feature-check"><i class="bi bi-check-circle-fill"></i></span></td>
+              <td><span class="feature-check"><i class="bi bi-check-circle-fill"></i></span></td>
+            </tr>
+            <tr>
+              <td>Dedicated Static IP & Private VLAN</td>
+              <td><span class="feature-dash">—</span></td>
+              <td>Add-on ($80)</td>
+              <td class="highlight-col"><span class="feature-check"><i class="bi bi-check-circle-fill"></i></span></td>
+              <td><span class="feature-check"><i class="bi bi-check-circle-fill"></i></span></td>
+            </tr>
+            <tr>
+              <td>Lockable Storage & Desk Setup</td>
+              <td><span class="feature-dash">—</span></td>
+              <td><span class="feature-check"><i class="bi bi-check-circle-fill"></i></span></td>
+              <td class="highlight-col"><span class="feature-check"><i class="bi bi-check-circle-fill"></i></span></td>
+              <td><span class="feature-check"><i class="bi bi-check-circle-fill"></i></span></td>
+            </tr>
+            <tr>
+              <td>Conference Room Credits / Month</td>
+              <td>2 Hours</td>
+              <td>5 Hours</td>
+              <td class="highlight-col">10 Hours</td>
+              <td>Unlimited</td>
+            </tr>
+            <tr>
+              <td>Global Multi-City Desk Roaming</td>
+              <td><span class="feature-dash">—</span></td>
+              <td>5 Days/mo</td>
+              <td class="highlight-col">Unlimited</td>
+              <td>Unlimited</td>
+            </tr>
+            <tr>
+              <td>Unlimited Barista Coffee & Espresso</td>
+              <td><span class="feature-check"><i class="bi bi-check-circle-fill"></i></span></td>
+              <td><span class="feature-check"><i class="bi bi-check-circle-fill"></i></span></td>
+              <td class="highlight-col"><span class="feature-check"><i class="bi bi-check-circle-fill"></i></span></td>
+              <td><span class="feature-check"><i class="bi bi-check-circle-fill"></i></span></td>
+            </tr>
+            <tr>
+              <td>Company Name Signage at Suite</td>
+              <td><span class="feature-dash">—</span></td>
+              <td><span class="feature-dash">—</span></td>
+              <td class="highlight-col"><span class="feature-check"><i class="bi bi-check-circle-fill"></i></span></td>
+              <td><span class="feature-check"><i class="bi bi-check-circle-fill"></i></span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+    <!-- ==================== FOOTER ==================== -->
+  <footer class="footer-master">
+    <div class="container-custom">
+      <div class="footer-grid-aligned">
+        <!-- Col 1: Brand & Bio -->
+        <div class="footer-col">
+          <a href="index.html" class="logo mb-3" style="display:inline-flex;">
+            <img class="logo-img" src="images/stackly-logo.webp" alt="WorkNest Stackly Logo">
+          </a>
+          <p class="footer-brand-desc">
+            Next-generation co-working spaces and enterprise office suites thoughtfully engineered for modern professionals, high-velocity creators, and ambitious teams.
+          </p>
+          <div class="footer-social-row">
+            <a href="404.html" class="social-circle-link" aria-label="LinkedIn" title="LinkedIn"><i class="bi bi-linkedin"></i></a>
+            <a href="404.html" class="social-circle-link" aria-label="Twitter / X" title="Twitter / X"><i class="bi bi-twitter-x"></i></a>
+            <a href="404.html" class="social-circle-link" aria-label="Instagram" title="Instagram"><i class="bi bi-instagram"></i></a>
+            <a href="404.html" class="social-circle-link" aria-label="GitHub" title="GitHub"><i class="bi bi-github"></i></a>
+          </div>
+        </div>
+
+        <!-- Col 2: Quick Links -->
+        <div class="footer-col">
+          <h4 class="footer-title">Quick Links</h4>
+          <ul class="footer-links-list">
+            <li><a href="index.html"><i class="bi bi-chevron-right"></i> Home</a></li>
+            <li><a href="properties.html"><i class="bi bi-chevron-right"></i> Properties</a></li>
+            <li><a href="space-types.html"><i class="bi bi-chevron-right"></i> Space Types</a></li>
+            <li><a href="about.html"><i class="bi bi-chevron-right"></i> About Us</a></li>
+            <li><a href="contact.html"><i class="bi bi-chevron-right"></i> Contact</a></li>
+          </ul>
+        </div>
+
+        <!-- Col 3: Top Metro Hubs (All Render to 404) -->
+        <div class="footer-col">
+          <h4 class="footer-title">Top Metro Hubs</h4>
+          <ul class="footer-links-list">
+            <li><a href="404.html"><i class="bi bi-geo-alt"></i> Bangalore (Koramangala, Indiranagar)</a></li>
+            <li><a href="404.html"><i class="bi bi-geo-alt"></i> Mumbai (BKC, Lower Parel)</a></li>
+            <li><a href="404.html"><i class="bi bi-geo-alt"></i> Delhi NCR (Cyber City, Noida)</a></li>
+            <li><a href="404.html"><i class="bi bi-geo-alt"></i> Hyderabad (Hitec City, Madhapur)</a></li>
+            <li><a href="404.html"><i class="bi bi-geo-alt"></i> Pune (Baner, Viman Nagar)</a></li>
+          </ul>
+        </div>
+
+        <!-- Col 4: Corporate Headquarters -->
+        <div class="footer-col">
+          <h4 class="footer-title">Corporate Headquarters</h4>
+          <div class="footer-contact-item">
+            <i class="bi bi-geo-alt-fill"></i>
+            <span>42 WorkNest Innovation Tower, 80ft Road, Koramangala 4th Block, Bangalore 560034</span>
+          </div>
+          <div class="footer-contact-item">
+            <i class="bi bi-envelope-fill"></i>
+            <a href="mailto:concierge@worknest.space" style="color: inherit; text-decoration: none;">concierge@worknest.space</a>
+          </div>
+          <div class="footer-contact-item">
+            <i class="bi bi-telephone-fill"></i>
+            <a href="tel:+918049208800" style="color: inherit; text-decoration: none;">+91 (080) 4920-8800 / +1 (800) 420-NEST</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Footer Bottom Copyright & Legal (All Legal Links Render to 404) -->
+      <div class="footer-bottom-bar">
+        <div>
+          &copy; 2026 WorkNest Global Workspaces Inc. All rights reserved.
+        </div>
+        <div class="footer-legal-links">
+          <a href="404.html">Privacy Policy</a>
+          <a href="404.html">Terms of Service</a>
+          <a href="404.html">Cookie Preferences</a>
+          <a href="404.html">Security & Compliance</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Modal -->
+  <div class="custom-modal-backdrop" id="tourModal" role="dialog" aria-modal="true">
+    <div class="custom-modal-dialog">
+      <div class="modal-header-custom">
+        <h3 style="font-size:1.3rem; margin:0; color:#ffffff;">Reserve a Workspace Tier</h3>
+        <button class="modal-close-btn modal-close-trigger"><i class="bi bi-x-lg"></i></button>
+      </div>
+      <div class="modal-body-custom">
+        <form id="tourBookingForm">
+          <div class="mb-3">
+            <label class="form-label" style="font-size:0.85rem; color:var(--text-muted); font-weight:600;">FULL NAME</label>
+            <input type="text" class="form-control" placeholder="Aakash Sharma" required style="background:rgba(255,255,255,0.05); border:1px solid var(--glass-border); color:#ffffff; border-radius:var(--radius-sm); padding:10px 14px;">
+          </div>
+          <div class="mb-3">
+            <label class="form-label" style="font-size:0.85rem; color:var(--text-muted); font-weight:600;">WORK EMAIL</label>
+            <input type="email" class="form-control" placeholder="aakash@startup.com" required style="background:rgba(255,255,255,0.05); border:1px solid var(--glass-border); color:#ffffff; border-radius:var(--radius-sm); padding:10px 14px;">
+          </div>
+          <div class="mb-4">
+            <label class="form-label" style="font-size:0.85rem; color:var(--text-muted); font-weight:600;">CHOSEN TIER</label>
+            <select class="form-select" id="modalSpaceSelect" style="background:#090f24; border:1px solid var(--glass-border); color:#ffffff; border-radius:var(--radius-sm); padding:10px 14px;">
+              <option value="Private Office Suite">Private Office Suite ($599/desk/mo)</option>
+              <option value="Dedicated Desk">Dedicated Desk ($349/mo)</option>
+              <option value="Flexible Hot Desk">Flexible Hot Desk ($199/mo)</option>
+              <option value="Enterprise Custom Floor">Enterprise Custom Floor</option>
+              <option value="Virtual Office & Mail">Virtual Office ($99/mo)</option>
+            </select>
+          </div>
+          <button type="submit" class="btn-magnetic btn-primary-glow w-100 btn-shimmer" style="padding:14px;">
+            Confirm Reservation & Book Tour
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <button class="back-to-top-btn" id="backToTopBtn" aria-label="Back to top">
+    <svg class="back-to-top-svg" viewBox="0 0 52 52">
+      <circle class="back-to-top-circle" id="backToTopCircle" cx="26" cy="26" r="24"></circle>
+    </svg>
+    <i class="bi bi-arrow-up"></i>
+  </button>
+
+  <script src="js/main.js"></script>
+</body>
+</html>

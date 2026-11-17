@@ -1,0 +1,76 @@
+==================== scratch_login.html ====================
+Title: Portal Login — PawsHaven Animal Welfare
+
+--- Form 1 ---
+  <input type="hidden" id="selectedRole" value="user">
+  <input 
+            type="email" 
+            id="loginEmail" 
+            placeholder="yourname@gmail.com" 
+            value=""
+            required 
+            autocomplete="off"
+          />
+  <input 
+              type="password" 
+              id="loginPassword" 
+              placeholder="Enter your strong password" 
+              value=""
+              required 
+              autocomplete="new-password"
+            />
+  <input type="checkbox" id="rememberMeCheck" style="width: auto; cursor: pointer;" onchange="hideRememberWarning()" />
+  BTN: <button type="button" class="pwd-toggle-btn" onclick="togglePasswordVisibility('loginPassword', this
+  BTN: <button type="submit" class="btn-auth-submit" id="submitBtn"> Sign In to Guardian Dashboard → </butt
+
+Role buttons: 2
+  <button type="button" class="role-btn active" id="userRoleBtn" onclick="selectRole('user')"> <i class="ph-fill ph-user-circle"></i> Guardian / Donor </button>
+  <button type="button" class="role-btn" id="adminRoleBtn" onclick="selectRole('admin')"> <i class="ph-fill ph-shield-check"></i> Sanctuary Admin </button>
+Functions: []
+Functions: ['selectRole', 'clearErrors', 'hideRememberWarning', 'isStrongPassword', 'handleLoginSubmit', 'togglePasswordVisibility']
+==================== scratch_get-started.html ====================
+Title: Create Account — PawsHaven Animal Welfare
+
+--- Form 1 ---
+  <input 
+            type="text" 
+            id="regName" 
+            placeholder="Letters only, max 16 chars" 
+            value="" 
+            maxlength="16"
+            required 
+            autocomplete="off"
+          />
+  <input 
+            type="email" 
+            id="regEmail" 
+            placeholder="yourname@gmail.com" 
+            value="" 
+            required 
+            autocomplete="off"
+          />
+  <select id="regRole" required>
+  <input 
+              type="password" 
+              id="regPassword" 
+              placeholder="Enter strong password" 
+              value="" 
+              required 
+              autocomplete="new-password"
+            />
+  <input 
+              type="password" 
+              id="confirmPassword" 
+              placeholder="Re-enter strong password" 
+              value="" 
+              required 
+              autocomplete="new-password"
+            />
+  <input type="checkbox" id="termsCheck" required style="width: auto; margin-top: 3px; cursor: pointer;">
+  BTN: <button type="button" class="pwd-toggle-btn" onclick="togglePasswordVisibility('regPassword', this)"
+  BTN: <button type="button" class="pwd-toggle-btn" onclick="togglePasswordVisibility('confirmPassword', th
+  BTN: <button type="submit" class="btn-auth-submit" id="createAccountBtn"> Create Account → </button>
+
+Role buttons: 0
+Functions: []
+Functions: ['isStrongPassword', 'handleRegisterSubmit', 'togglePasswordVisibility']
